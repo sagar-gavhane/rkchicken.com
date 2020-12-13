@@ -33,7 +33,6 @@ const CustomerSchema = new Schema(
         (value) => ('' + value).length === 10,
         'Alternative mobile number field must be exactly 10 digits in length.',
       ],
-      required: [true, 'Alternative mobile number field is required.'],
     },
     discountRate: {
       type: Number,
