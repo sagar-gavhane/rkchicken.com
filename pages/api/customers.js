@@ -13,14 +13,14 @@ export default async function handler(req, res) {
         const customers = await CustomerModel.find()
 
         res.status(httpStatusCodes.OK).send({
-          message: 'Customers records successfully retrived.',
+          message: 'Customers record successfully retrived.',
           data: customers,
         })
       } catch (err) {
         handleError(res, err)
-      } finally {
-        break
       }
+
+      break
     }
 
     case 'POST': {
@@ -28,14 +28,14 @@ export default async function handler(req, res) {
         const customer = await CustomerModel(req.body).save()
 
         res.status(httpStatusCodes.CREATED).send({
-          message: 'Customer has been successfully created.',
+          message: 'Customer has been created successfully.',
           data: customer,
         })
       } catch (err) {
         handleError(res, err)
-      } finally {
-        break
       }
+
+      break
     }
 
     default: {
