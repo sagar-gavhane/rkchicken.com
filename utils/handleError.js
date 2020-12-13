@@ -14,10 +14,10 @@ export function handleError(res, err) {
       message,
       code: 'ValidationError',
     })
+  } else {
+    res.status(httpStatusCodes.UNPROCESSABLE_ENTITY).json({
+      message: err.message,
+      code: err.code ?? 'UNPROCESSABLE_ENTITY',
+    })
   }
-
-  res.status(httpStatusCodes.UNPROCESSABLE_ENTITY).json({
-    message: err.message,
-    code: err.code ?? 'UNPROCESSABLE_ENTITY',
-  })
 }
