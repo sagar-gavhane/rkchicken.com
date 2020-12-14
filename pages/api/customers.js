@@ -25,7 +25,7 @@ export default async function handler(req, res) {
 
     case 'POST': {
       try {
-        const customer = await CustomerModel(req.body).save()
+        const customer = await new CustomerModel(req.body).save()
 
         res.status(httpStatusCodes.CREATED).send({
           message: 'Customer has been created successfully.',
