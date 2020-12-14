@@ -2,11 +2,13 @@ import httpStatusCodes from 'http-status-codes'
 import { Types } from 'mongoose'
 
 import InvoiceModel from 'models/Invoice'
+import CustomerModel from 'models/Customer'
 import invoiceError from 'errors/invoice'
 import { invoice as invoiceProjection } from 'aggregation-pipelines/projections'
 import { customer as customerLookup } from 'aggregation-pipelines/lookups'
 import { connectToDatabase } from 'utils/connectToDatabase'
 import { handleError } from 'utils/handleError'
+import { sendInvoice } from 'utils/sendInvoice'
 
 export default async function handler(req, res) {
   try {
@@ -38,6 +40,38 @@ export default async function handler(req, res) {
         res.status(httpStatusCodes.OK).send({
           data: invoice,
           message: 'Invoice has been successfully retrieved.',
+        })
+      } catch (err) {
+        handleError(res, err)
+      }
+
+      break
+    }
+
+    case 'PATCH': {
+      try {
+        const invoice = await InvoiceModel.findByIdAndUpdate(
+          req.query.invoiceId,
+          req.body,
+          { new: true, runValidators: true }
+        )
+
+        const customer = await CustomerModel.findByIdAndUpdate(
+          req.body.customerId,
+          {
+            outstandingAmount: req.body.remainingBalance,
+          },
+          {
+            new: true,
+            runValidators: true,
+          }
+        )
+
+        sendInvoice(customer, invoice)
+
+        res.status(httpStatusCodes.OK).send({
+          data: invoice,
+          message: 'Invoice has been successfully updated.',
         })
       } catch (err) {
         handleError(res, err)
