@@ -13,7 +13,7 @@ export default async function handler(req, res) {
         const customers = await CustomerModel.find()
 
         res.status(httpStatusCodes.OK).send({
-          message: 'Customers record successfully retrived.',
+          message: 'Customers record successfully retrieved.',
           data: customers,
         })
       } catch (err) {

@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "http-errors": "^1.8.0",
     "http-status-codes": "^2.1.4",
     "lodash.round": "^4.0.4",
     "mongoose": "^5.11.7",
