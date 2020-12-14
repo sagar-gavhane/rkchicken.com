@@ -7,11 +7,31 @@ import customerError from 'errors/customer'
 import { connectToDatabase } from 'utils/connectToDatabase'
 import { handleError } from 'utils/handleError'
 import { sendInvoice } from 'utils/sendInvoice'
+import { customer as customerLookup } from 'aggregation-pipelines/lookups'
+import { invoice as invoiceProjection } from 'aggregation-pipelines/projections'
 
 export default async function handler(req, res) {
   await connectToDatabase()
 
   switch (req.method) {
+    case 'GET': {
+      try {
+        const invoices = await InvoiceModel.aggregate([
+          customerLookup,
+          invoiceProjection,
+        ])
+
+        res.status(httpStatusCodes.OK).send({
+          data: invoices,
+          message: 'Invoice has been successfully retrieved.',
+        })
+      } catch (err) {
+        handleError(res, err)
+      }
+
+      break
+    }
+
     case 'POST': {
       try {
         const customerId = req.body.customerId
@@ -48,7 +68,7 @@ export default async function handler(req, res) {
     }
 
     default: {
-      res.setHeader('Allow', ['POST'])
+      res.setHeader('Allow', ['GET', 'POST'])
       res
         .status(httpStatusCodes.METHOD_NOT_ALLOWED)
         .end(`Method ${req.method} Not Allowed`)
