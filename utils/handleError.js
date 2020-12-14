@@ -15,7 +15,7 @@ export function handleError(res, err) {
       code: 'ValidationError',
     })
   } else {
-    res.status(httpStatusCodes.UNPROCESSABLE_ENTITY).json({
+    res.status(err.status ?? httpStatusCodes.UNPROCESSABLE_ENTITY).json({
       message: err.message,
       code: err.code ?? 'UNPROCESSABLE_ENTITY',
     })
