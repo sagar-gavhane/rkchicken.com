@@ -13,6 +13,8 @@ export default async function handler(req, res) {
       throw customerError.INVALID_CUSTOMER_ID(req.query.customerId)
     }
 
+    await connectToDatabase()
+
     // early catch customer is exist or not database
     const customer = await CustomerModel.exists({ _id: req.query.customerId })
 
@@ -23,8 +25,6 @@ export default async function handler(req, res) {
     handleError(res, err)
     return
   }
-
-  await connectToDatabase()
 
   switch (req.method) {
     case 'GET': {
