@@ -3,8 +3,8 @@ import { Types } from 'mongoose'
 
 import InvoiceModel from 'models/Invoice'
 import invoiceError from 'errors/invoice'
-import projection from 'aggregation-pipelines/invoice/projections'
-import { customer as customerLookup } from 'aggregation-pipelines/invoice/lookups'
+import { invoice as invoiceProjection } from 'aggregation-pipelines/projections'
+import { customer as customerLookup } from 'aggregation-pipelines/lookups'
 import { connectToDatabase } from 'utils/connectToDatabase'
 import { handleError } from 'utils/handleError'
 
@@ -32,7 +32,7 @@ export default async function handler(req, res) {
         const [invoice] = await InvoiceModel.aggregate([
           { $match: { _id: Types.ObjectId(req.query.invoiceId) } },
           customerLookup,
-          projection,
+          invoiceProjection,
         ])
 
         res.status(httpStatusCodes.OK).send({

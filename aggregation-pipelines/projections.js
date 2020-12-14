@@ -1,4 +1,4 @@
-export default {
+export const invoice = {
   $project: {
     outstandingAmount: 1,
     birdsNumber: 1,

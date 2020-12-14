@@ -7,57 +7,64 @@ const InvoiceSchema = new Schema(
     customerId: {
       type: Schema.Types.ObjectId,
       ref: 'Customer',
+      required: [true, 'Customer id field is required.'],
     },
     outstandingAmount: {
       type: Number,
-      min: 0,
       default: 0,
       set: (value) => round(value, 2),
     },
     birdsNumber: {
       type: Number,
-      required: true,
       default: 0,
     },
     weight: {
       type: Number,
-      min: 0,
-      required: true,
+      min: [
+        0,
+        'Weight field must contain a number greater than or equal to 0.',
+      ],
       default: 0,
     },
     discountRate: {
       type: Number,
-      min: 0,
+      min: [
+        0,
+        'Discount rate field must contain a number greater than or equal to 0.',
+      ],
       default: 0,
       set: (value) => round(value, 2),
     },
     currentBillAmount: {
       type: Number,
-      min: 0,
+      min: [
+        0,
+        'Current bill amount field must contain a number greater than or equal to 0.',
+      ],
       default: 0,
       set: (value) => round(value, 2),
     },
     outstandingAmount: {
       type: Number,
-      min: 0,
       default: 0,
       set: (value) => round(value, 2),
     },
     totalAmount: {
       type: Number,
-      min: 0,
       default: 0,
       set: (value) => round(value, 2),
     },
     paidAmount: {
       type: Number,
-      min: 0,
+      min: [
+        0,
+        'Paid amount field must contain a number greater than or equal to 0.',
+      ],
       default: 0,
       set: (value) => round(value, 2),
     },
     remainingBalance: {
       type: Number,
-      min: 0,
       default: 0,
       set: (value) => round(value, 2),
     },
