@@ -80,8 +80,20 @@ export default async function handler(req, res) {
       break
     }
 
+    case 'DELETE': {
+      try {
+        await InvoiceModel.findByIdAndRemove(req.query.invoiceId)
+
+        res.status(httpStatusCodes.NO_CONTENT).send({})
+      } catch (err) {
+        handleError(res, err)
+      }
+
+      break
+    }
+
     default: {
-      res.setHeader('Allow', ['GET'])
+      res.setHeader('Allow', ['GET', 'PATCH', 'DELETE'])
       res
         .status(httpStatusCodes.METHOD_NOT_ALLOWED)
         .end(`Method ${req.method} Not Allowed`)
