@@ -81,7 +81,7 @@ export default async function handler(req, res) {
     }
 
     default: {
-      res.setHeader('Allow', ['GET', 'POST'])
+      res.setHeader('Allow', ['GET', 'PATCH', 'DELETE'])
       res
         .status(httpStatusCodes.METHOD_NOT_ALLOWED)
         .end(`Method ${req.method} Not Allowed`)
