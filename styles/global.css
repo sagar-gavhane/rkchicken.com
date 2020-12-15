@@ -1,0 +1,46 @@
+#components-layout-demo-responsive .trigger {
+  font-size: 18px;
+  line-height: 64px;
+  padding: 0 24px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+#components-layout-demo-responsive .trigger:hover {
+  color: #1890ff;
+}
+
+#components-layout-demo-responsive .logo {
+  height: 32px;
+  background: rgba(255, 255, 255, 0.3);
+  margin: 16px;
+  display: grid;
+  align-items: center;
+  color: #fff;
+  font-size: 1rem;
+  padding: 0 1rem;
+  cursor: pointer;
+}
+
+.site-layout-sub-header-background {
+  background: #fff;
+}
+
+.site-layout-header {
+  background: #fff;
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  padding: 0 1.25rem;
+}
+
+.site-layout-header .logout-outlined-wrapper {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+}
+
+.site-layout {
+  background: #fff;
+  padding: 24px;
+  min-height: 100%;
+}
