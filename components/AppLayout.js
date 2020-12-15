@@ -12,7 +12,6 @@ import {
 import { useRouter } from 'next/router'
 
 import Clock from 'components/Clock'
-
 import AuthContext from 'context/AuthContext'
 
 const { Header, Content, Footer, Sider } = Layout
