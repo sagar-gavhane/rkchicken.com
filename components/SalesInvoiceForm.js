@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
 import moment from 'moment'
+import size from 'lodash.size'
 import {
   Row,
   Col,
@@ -104,7 +105,7 @@ function SalesInvoiceForm(props) {
   }
 
   useEffect(() => {
-    if (Object.keys(selectedCustomer).length > 0 && formData.chickenRate) {
+    if (size(selectedCustomer)) {
       const currentBillAmount =
         formData.weight * formData.chickenRate - selectedCustomer.discountRate
       const totalAmount = currentBillAmount + selectedCustomer.outstandingAmount
