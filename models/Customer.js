@@ -29,8 +29,9 @@ const CustomerSchema = new Schema(
     alternativeMobileNumber: {
       type: String,
       trim: true,
+      default: '',
       validate: [
-        (value) => ('' + value).length === 10,
+        (value) => ('' + value).length === 10 || ('' + value).length === 0,
         'Alternative mobile number field must be exactly 10 digits in length.',
       ],
     },
