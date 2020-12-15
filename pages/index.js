@@ -1,65 +1,83 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import React, { useContext } from 'react'
+import { Form, Input, Button, Row, Col, Typography, message, Spin } from 'antd'
+import { LockOutlined, MailOutlined } from '@ant-design/icons'
+import { useRouter } from 'next/router'
+import { useMutation } from 'react-query'
 
-export default function Home() {
+import authService from 'services/auth'
+import validationRules from 'config/validationRules'
+import AuthContext from 'context/AuthContext'
+
+const IndexPage = () => {
+  const router = useRouter()
+  const [loginMutation] = useMutation(authService.login)
+  const [user, setUser] = useContext(AuthContext)
+
+  const onFinish = async (values) => {
+    loginMutation(values, {
+      onSuccess: async () => {
+        const authPayload = { ...values, signedIn: true }
+        setUser(authPayload)
+        message.success(`You've successfully logged into system.`)
+        router.push('/customer')
+      },
+      onError: (err) => {
+        if (err.response) {
+          const code = err.response.data?.code
+          if (code === 'AUTH_MISMATCHED') {
+            message.error('Email and password mis-matched')
+          }
+        } else {
+          message.error(err.message)
+        }
+      },
+    })
+  }
+
+  if (user && user.signedIn) {
+    router.push('/customer')
+
+    return null
+  }
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+    <Row
+      type='flex'
+      align='middle'
+      justify='center'
+      style={{ height: '100vh' }}
+    >
+      <Col xs={20} sm={12} md={8} lg={6}>
+        <Typography.Title level={2}>Sign In</Typography.Title>
+        <Form
+          name='login'
+          layout='vertical'
+          initialValues={{ email: '', password: '' }}
+          autoCapitalize='false'
+          autoComplete='true'
+          autoCorrect='true'
+          onFinish={onFinish}
+          requiredMark={false}
         >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
+          <Form.Item label='Email' name='email' rules={validationRules.email}>
+            <Input type='email' prefix={<MailOutlined />} />
+          </Form.Item>
+          <Form.Item
+            label='Password'
+            name='password'
+            rules={validationRules.password}
+          >
+            <Input.Password prefix={<LockOutlined />} />
+          </Form.Item>
+          <Form.Item>
+            <Button type='primary' htmlType='submit' block>
+              Sign In
+            </Button>
+          </Form.Item>
+        </Form>
+      </Col>
+    </Row>
   )
 }
+
+export default IndexPage
