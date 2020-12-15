@@ -9,6 +9,7 @@ import { handleError } from 'utils/handleError'
 import { sendInvoice } from 'utils/sendInvoice'
 import { customer as customerLookup } from 'aggregation-pipelines/lookups'
 import { invoice as invoiceProjection } from 'aggregation-pipelines/projections'
+import { invoiceFilter } from 'aggregation-pipelines/matches'
 
 export default async function handler(req, res) {
   await connectToDatabase()
@@ -16,10 +17,13 @@ export default async function handler(req, res) {
   switch (req.method) {
     case 'GET': {
       try {
-        const invoices = await InvoiceModel.aggregate([
+        const pipeline = [
           customerLookup,
+          invoiceFilter(req.query),
           invoiceProjection,
-        ])
+        ].filter(Boolean)
+
+        const invoices = await InvoiceModel.aggregate(pipeline)
 
         res.status(httpStatusCodes.OK).send({
           data: invoices,

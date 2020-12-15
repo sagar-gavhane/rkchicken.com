@@ -11,6 +11,8 @@ export const invoice = {
     createdAt: 1,
     updatedAt: 1,
     invoiceId: 1,
+    invoiceDate: 1,
+    chickenRate: 1,
     customer: {
       $arrayElemAt: ['$customer', 0],
     },

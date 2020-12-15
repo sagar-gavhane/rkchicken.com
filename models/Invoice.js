@@ -68,6 +68,16 @@ const InvoiceSchema = new Schema(
       default: 0,
       set: (value) => round(value, 2),
     },
+    invoiceDate: {
+      type: Date,
+      default: Date.now(),
+    },
+    chickenRate: {
+      type: Number,
+      min: 0,
+      default: 0,
+      set: (value) => round(value, 2),
+    },
     createdAt: { type: Date, default: Date.now },
   },
   {
