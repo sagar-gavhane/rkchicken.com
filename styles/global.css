@@ -1,3 +1,7 @@
+#components-layout-demo-responsive {
+  min-height: 100vh;
+}
+
 #components-layout-demo-responsive .trigger {
   font-size: 18px;
   line-height: 64px;

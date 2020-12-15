@@ -34,10 +34,7 @@ export default function AppLayout(props) {
   if (!user?.signedIn && typeof window !== 'undefined') router.push('/logout')
 
   return (
-    <Layout
-      id='components-layout-demo-responsive'
-      style={{ minHeight: '100vh' }}
-    >
+    <Layout id='components-layout-demo-responsive'>
       <Sider breakpoint='md' collapsedWidth='0'>
         <Link href='/customer'>
           <a className='logo'>RKChicken</a>
