@@ -1,8 +1,5 @@
 import size from 'lodash.size'
-import isEqual from 'date-fns/isEqual'
-import subDays from 'date-fns/subDays'
-import set from 'date-fns/set'
-
+import { isEqual, subDays, set } from 'date-fns'
 import { Types } from 'mongoose'
 
 export const invoiceFilter = (query) => {
