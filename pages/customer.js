@@ -13,7 +13,7 @@ import { useRouter } from 'next/router'
 
 import AppLayout from 'components/AppLayout'
 import CustomerModal from 'components/CustomerModal'
-import { getCustomersService, deleteCustomerService } from 'services/customers'
+import customerService from 'services/customers'
 
 export default function CustomerPage() {
   const [showCustomerModal, setShowCustomerModal] = useState(false)
@@ -24,11 +24,11 @@ export default function CustomerPage() {
   const router = useRouter()
 
   const { data, isLoading } = useQuery(['/customers'], () =>
-    getCustomersService()
+    customerService.get()
   )
 
   const handleDeleteCustomer = async (customerID) => {
-    await deleteCustomerService(customerID)
+    await customerService.delete(customerID)
     message.success('customer has been successfully deleted.')
     cache.invalidateQueries(['/customers'])
   }

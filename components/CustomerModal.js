@@ -4,10 +4,7 @@ import { Modal, Form, Input, message } from 'antd'
 import { useQueryCache } from 'react-query'
 
 import validationRules from 'config/validationRules'
-import {
-  createCustomerService,
-  updateCustomerService,
-} from 'services/customers'
+import customerService from 'services/customers'
 
 const CustomerModal = (props) => {
   const [form] = Form.useForm()
@@ -50,10 +47,10 @@ const CustomerModal = (props) => {
             setIsSubmitting(true)
 
             if (props.modalType === 'EDIT_CUSTOMER_MODAL') {
-              await updateCustomerService(props.customer._id, values)
+              await customerService.update(props.customer._id, values)
               message.success('Customer has been updated successfully.')
             } else {
-              await createCustomerService(values)
+              await customerService.create(values)
               message.success('Customer has been created successfully.')
             }
 

@@ -18,13 +18,13 @@ import { useQuery } from 'react-query'
 
 import AppLayout from 'components/AppLayout'
 import salesService from 'services/sales'
-import { getCustomersService } from 'services/customers'
+import customerService from 'services/customers'
 
 export default function CustomerReportPage() {
   const [form] = Form.useForm()
 
   const { data: customers } = useQuery(['/customers'], () =>
-    getCustomersService()
+    customerService.get()
   )
   const { data: invoices, isLoading, refetch } = useQuery(
     [

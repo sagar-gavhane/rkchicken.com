@@ -21,7 +21,7 @@ import { useRouter } from 'next/router'
 
 import AppLayout from 'components/AppLayout'
 import salesService from 'services/sales'
-import { getCustomersService } from 'services/customers'
+import customerService from 'services/customers'
 
 const layout = {
   labelCol: { span: 8 },
@@ -59,7 +59,7 @@ function SalesInvoiceForm(props) {
   })
 
   const { data: customers } = useQuery(['/customers'], () =>
-    getCustomersService()
+    customerService.get()
   )
 
   const cache = useQueryCache()
