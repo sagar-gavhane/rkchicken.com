@@ -9,11 +9,6 @@ const InvoiceSchema = new Schema(
       ref: 'Customer',
       required: [true, 'Customer id field is required.'],
     },
-    outstandingAmount: {
-      type: Number,
-      default: 0,
-      set: (value) => round(value, 2),
-    },
     birdsNumber: {
       type: Number,
       default: 0,
