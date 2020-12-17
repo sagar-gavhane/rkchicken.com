@@ -18,3 +18,20 @@ export const invoice = {
     },
   },
 }
+
+export const purchaseInvoice = {
+  $project: {
+    birdsNumber: 1,
+    weight: 1,
+    currentBillAmount: 1,
+    paidAmount: 1,
+    createdAt: 1,
+    updatedAt: 1,
+    invoiceId: 1,
+    invoiceDate: 1,
+    chickenRate: 1,
+    company: {
+      $arrayElemAt: ['$company', 0],
+    },
+  },
+}

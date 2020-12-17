@@ -28,6 +28,8 @@ export default function AppLayout(props) {
     '/sales': '3',
     '/sales/invoice/create': '3',
     '/sales/invoice/update/[invoiceId]': '3',
+    '/purchase/invoice/create': '4',
+    '/purchase/invoice/update/[invoiceId]': '4',
     '/purchase': '4',
   }
 
@@ -59,7 +61,7 @@ export default function AppLayout(props) {
               <a>Sales</a>
             </Link>
           </Menu.Item>
-          <Menu.Item key='4' icon={<ScanOutlined />} hidden>
+          <Menu.Item key='4' icon={<ScanOutlined />}>
             <Link href='/purchase'>
               <a>Purchase</a>
             </Link>
