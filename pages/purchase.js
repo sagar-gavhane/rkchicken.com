@@ -14,7 +14,7 @@ export default function PurchasePage() {
   const router = useRouter()
   const cache = useQueryCache()
 
-  const { data, isLoading } = useQuery(['/purchases'], () => {
+  const { data, isLoading } = useQuery(['/purchases/invoices'], () => {
     return purchaseService.invoice.list()
   })
 
@@ -22,7 +22,7 @@ export default function PurchasePage() {
     try {
       await purchaseService.invoice.delete(invoiceId)
       message.success('Purchase invoice deleted successfully.')
-      cache.invalidateQueries(['/purchases'])
+      cache.invalidateQueries(['/purchases/invoices'])
     } catch (err) {
       message.error(err.message)
     }
@@ -50,6 +50,18 @@ export default function PurchasePage() {
       title: 'Chicken rate',
       dataIndex: 'chickenRate',
       name: 'chickenRate',
+      render: (value) => `₹${round(value, 2)}`,
+    },
+    {
+      title: 'Current bill amount',
+      dataIndex: 'currentBillAmount',
+      name: 'currentBillAmount',
+      render: (value) => `₹${round(value, 2)}`,
+    },
+    {
+      title: 'Paid amount',
+      dataIndex: 'paidAmount',
+      name: 'paidAmount',
       render: (value) => `₹${round(value, 2)}`,
     },
     {

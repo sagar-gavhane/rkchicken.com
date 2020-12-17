@@ -28,6 +28,8 @@ export default function AppLayout(props) {
     '/sales': '3',
     '/sales/invoice/create': '3',
     '/sales/invoice/update/[invoiceId]': '3',
+    '/purchase/invoice/create': '4',
+    '/purchase/invoice/update/[invoiceId]': '4',
     '/purchase': '4',
   }
 

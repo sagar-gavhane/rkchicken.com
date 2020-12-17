@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import round from 'lodash.round'
 import moment from 'moment'
 import { Button, Table, Space, Typography, Popconfirm, message } from 'antd'
 import {
@@ -48,12 +47,6 @@ export default function CompanyPage() {
       title: 'Mobile number',
       dataIndex: 'mobileNumber',
       key: 'mobileNumber',
-    },
-    {
-      title: 'Outstanding amount',
-      dataIndex: 'outstandingAmount',
-      key: 'outstandingAmount',
-      render: (value) => `₹${round(value, 2)}`,
     },
     {
       title: 'Created at',

@@ -54,7 +54,9 @@ function PurchaseInvoiceForm(props) {
     return typeof props.invoice !== 'undefined' ? props.invoice.company : {}
   })
 
-  const { data: company } = useQuery(['/companies'], () => companyService.get())
+  const { data: companies } = useQuery(['/companies'], () =>
+    companyService.get()
+  )
 
   const cache = useQueryCache()
 
@@ -62,7 +64,7 @@ function PurchaseInvoiceForm(props) {
     if (!option) {
       setSelectedCompany({})
     } else {
-      const [company] = company.filter((c) => c._id === option._id)
+      const [company] = companies.filter((c) => c._id === option._id)
       setSelectedCompany(company)
     }
   }
@@ -94,9 +96,9 @@ function PurchaseInvoiceForm(props) {
       })
       message.success('Purchase invoice has been updated.')
       cache.invalidateQueries(['/companies'])
-      cache.invalidateQueries(['/purchase/invoices'])
+      cache.invalidateQueries(['/purchases/invoices'])
       cache.invalidateQueries([
-        '/purchase/invoice/',
+        '/purchases/invoices',
         { invoiceId: props.invoice._id },
       ])
 
@@ -108,7 +110,7 @@ function PurchaseInvoiceForm(props) {
       })
       message.success('Purchase invoice has been created.')
       cache.invalidateQueries(['/companies'])
-      cache.invalidateQueries(['/purchase/invoice'])
+      cache.invalidateQueries(['/purchases/invoices'])
 
       router.push('/purchase')
     }
@@ -164,8 +166,8 @@ function PurchaseInvoiceForm(props) {
                 onChange={handleChange}
                 allowClear
               >
-                {Array.isArray(company) &&
-                  company.map((company) => (
+                {Array.isArray(companies) &&
+                  companies.map((company) => (
                     <Select.Option
                       key={company._id}
                       _id={company._id}
