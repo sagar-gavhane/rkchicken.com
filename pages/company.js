@@ -26,7 +26,6 @@ export default function CompanyPage() {
   const { data: companies, isLoading } = useQuery(['/companies'], () => {
     return companyService.get()
   })
-  console.log('[companies]', companies)
 
   const handleDeleteCompany = async (companyId) => {
     await companyService.delete(companyId)
