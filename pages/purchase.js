@@ -69,7 +69,7 @@ export default function PurchasePage() {
       key: 'action',
       render: (text, record) => (
         <Space size='middle'>
-          <Link href={`/sales/invoice/update/${record._id}`}>
+          <Link href={`/purchase/invoice/update/${record._id}`}>
             <Typography.Link>
               <EditOutlined />
             </Typography.Link>
