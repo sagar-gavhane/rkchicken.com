@@ -49,7 +49,7 @@ export default function AppLayout(props) {
               <a>Customer</a>
             </Link>
           </Menu.Item>
-          <Menu.Item key='2' icon={<BankOutlined />} hidden>
+          <Menu.Item key='2' icon={<BankOutlined />}>
             <Link href='/company'>
               <a>Company</a>
             </Link>

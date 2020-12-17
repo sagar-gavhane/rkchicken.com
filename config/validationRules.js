@@ -1,5 +1,11 @@
 const validationRules = {
-  companyName: [{ required: true, message: 'Please enter your company name!' }],
+  companyName: [
+    {
+      min: 3,
+      message: 'Company name field must be at least 3 characters in length.',
+    },
+    { required: true, message: 'Company name field is required.' },
+  ],
   customerName: [
     {
       min: 3,
@@ -26,7 +32,7 @@ const validationRules = {
       min: 10,
       message: 'Mobile number field must be at least 10 digits in length.',
     },
-    { max: 13, message: 'Mobile number cannot exceed 13 digits in length.' },
+    { max: 10, message: 'Mobile number cannot exceed 10 digits in length.' },
     { required: true, message: 'Mobile number field is required.' },
   ],
   alternativeMobileNumber: [
