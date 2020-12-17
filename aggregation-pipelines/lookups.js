@@ -6,3 +6,12 @@ export const customer = {
     as: 'customer',
   },
 }
+
+export const company = {
+  $lookup: {
+    from: 'companies',
+    localField: 'companyId',
+    foreignField: '_id',
+    as: 'company',
+  },
+}

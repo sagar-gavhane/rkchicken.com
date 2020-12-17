@@ -59,7 +59,7 @@ export default function AppLayout(props) {
               <a>Sales</a>
             </Link>
           </Menu.Item>
-          <Menu.Item key='4' icon={<ScanOutlined />} hidden>
+          <Menu.Item key='4' icon={<ScanOutlined />}>
             <Link href='/purchase'>
               <a>Purchase</a>
             </Link>
