@@ -24,7 +24,7 @@ export default function AppLayout(props) {
     '/customer': '1',
     '/customer-report': '1',
     '/company': '2',
-    '/company-report': '2',
+    '/company/report': '2',
     '/sales': '3',
     '/sales/invoice/create': '3',
     '/sales/invoice/update/[invoiceId]': '3',
