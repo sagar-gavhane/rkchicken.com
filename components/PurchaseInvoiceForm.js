@@ -93,6 +93,7 @@ function PurchaseInvoiceForm(props) {
       await purchaseService.invoice.update(props.invoice._id, {
         ...formData,
         companyId: selectedCompany._id,
+        outstandingAmount: formData.currentBillAmount - formData.paidAmount,
       })
       message.success('Purchase invoice has been updated.')
       cache.invalidateQueries(['/companies'])
@@ -107,6 +108,7 @@ function PurchaseInvoiceForm(props) {
       await purchaseService.invoice.create({
         ...formData,
         companyId: selectedCompany._id,
+        outstandingAmount: formData.currentBillAmount - formData.paidAmount,
       })
       message.success('Purchase invoice has been created.')
       cache.invalidateQueries(['/companies'])
@@ -247,6 +249,12 @@ function PurchaseInvoiceForm(props) {
                 }}
               />
             </Form.Item>
+            <Form.Item label='Outstanding amount'>
+              <Input
+                value={formData.currentBillAmount - formData.paidAmount}
+                disabled
+              />
+            </Form.Item>
             <Form.Item {...tailLayout}>
               <Button
                 type='primary'
@@ -265,10 +273,11 @@ function PurchaseInvoiceForm(props) {
 
 PurchaseInvoiceForm.propTypes = {
   actionType: 'CREATE_INVOICE',
+  invoice: {},
 }
 
 PurchaseInvoiceForm.propTypes = {
-  invoice: PropTypes.object.isRequired,
+  invoice: PropTypes.object,
   actionType: PropTypes.oneOf(['CREATE_INVOICE', 'EDIT_INVOICE']).isRequired,
 }
 

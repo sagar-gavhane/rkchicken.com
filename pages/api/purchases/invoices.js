@@ -51,6 +51,10 @@ export default async function handler(req, res) {
 
         const purchaseInvoice = await PurchaseInvoiceModel(req.body).save()
 
+        await CompanyModel.findByIdAndUpdate(companyId, {
+          $inc: { outstandingAmount: req.body.outstandingAmount },
+        })
+
         res.status(httpStatusCodes.OK).send({
           data: purchaseInvoice,
           message: 'Purchase invoice has been successfully created.',

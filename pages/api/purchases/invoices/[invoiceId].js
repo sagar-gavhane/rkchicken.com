@@ -1,6 +1,7 @@
 import httpStatusCodes from 'http-status-codes'
 import { Types } from 'mongoose'
 
+import CompanyModel from 'models/Company'
 import PurchaseInvoiceModel from 'models/PurchaseInvoice'
 import purchaseInvoiceError from 'errors/purchaseInvoice'
 import { purchaseInvoice as purchaseInvoiceProjection } from 'aggregation-pipelines/projections'
@@ -55,6 +56,12 @@ export default async function handler(req, res) {
           req.body,
           { new: true, runValidators: true }
         )
+
+        if (typeof req.body.outstandingAmount !== 'undefined') {
+          await CompanyModel.findByIdAndUpdate(invoice.companyId, {
+            $inc: { outstandingAmount: req.body.outstandingAmount },
+          })
+        }
 
         res.status(httpStatusCodes.OK).send({
           data: invoice,

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import moment from 'moment'
+import round from 'lodash.round'
 import { Button, Table, Space, Typography, Popconfirm, message } from 'antd'
 import {
   UserAddOutlined,
@@ -47,6 +48,12 @@ export default function CompanyPage() {
       title: 'Mobile number',
       dataIndex: 'mobileNumber',
       key: 'mobileNumber',
+    },
+    {
+      title: 'Outstanding amount',
+      dataIndex: 'outstandingAmount',
+      name: 'outstandingAmount',
+      render: (value) => `₹${round(value, 2)}`,
     },
     {
       title: 'Created at',
