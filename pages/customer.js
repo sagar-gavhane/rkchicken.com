@@ -133,7 +133,7 @@ export default function CustomerPage() {
         <Button
           type='default'
           icon={<FilePdfOutlined />}
-          onClick={() => router.push('/customer-report')}
+          onClick={() => router.push('/customer/report')}
         >
           Report
         </Button>
