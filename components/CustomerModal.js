@@ -61,7 +61,6 @@ const CustomerModal = (props) => {
           })
           .catch((err) => {
             message.error(err.message)
-            console.log('Validate Failed:', err)
           })
           .finally(() => setIsSubmitting(false))
       }}

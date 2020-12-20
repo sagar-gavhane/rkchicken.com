@@ -281,11 +281,11 @@ function SalesInvoiceForm(props) {
             </Form.Item>
             <Form.Item label='Current bill amount'>
               <Input
+                prefix={<span>₹</span>}
                 value={formData.currentBillAmount}
                 onChange={(e) => {
                   const currentBillAmount = +e.target.value
                   const nextFormData = { ...formData, currentBillAmount }
-                  console.log('[nextFormData]', nextFormData)
                   setFormData(nextFormData)
                   recalculateAmounts(nextFormData)
                 }}
@@ -294,6 +294,7 @@ function SalesInvoiceForm(props) {
             </Form.Item>
             <Form.Item label='Previous amount'>
               <Input
+                prefix={<span>₹</span>}
                 value={formData.outstandingAmount}
                 onChange={(outstandingAmount) =>
                   setFormData({ ...formData, outstandingAmount })
@@ -303,6 +304,7 @@ function SalesInvoiceForm(props) {
             </Form.Item>
             <Form.Item label='Total amount'>
               <Input
+                prefix={<span>₹</span>}
                 value={formData.totalAmount}
                 onChange={(totalAmount) =>
                   setFormData({ ...formData, totalAmount })
@@ -312,6 +314,7 @@ function SalesInvoiceForm(props) {
             </Form.Item>
             <Form.Item label='Paid amount'>
               <Input
+                prefix={<span>₹</span>}
                 value={formData.paidAmount}
                 onChange={(e) => {
                   const paidAmount = +e.target.value
@@ -329,9 +332,9 @@ function SalesInvoiceForm(props) {
             </Form.Item>
             <Form.Item label='Remaining balance'>
               <Input
+                prefix={<span>₹</span>}
                 value={formData.remainingBalance}
                 onChange={(remainingBalance) => {
-                  console.log('[remainingBalance++]', remainingBalance)
                   setFormData({ ...formData, remainingBalance })
                 }}
                 disabled
