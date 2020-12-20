@@ -90,7 +90,7 @@ const CompanyModal = (props) => {
           name='outstandingAmount'
           rules={validationRules.outstandingAmount}
         >
-          <Input type='number' />
+          <Input type='number' prefix={<span>₹</span>} />
         </Form.Item>
         <Form.Item label='Address' name='address'>
           <Input.TextArea rows={4} />
