@@ -286,7 +286,6 @@ function SalesInvoiceForm(props) {
                 onChange={(e) => {
                   const currentBillAmount = +e.target.value
                   const nextFormData = { ...formData, currentBillAmount }
-                  console.log('[nextFormData]', nextFormData)
                   setFormData(nextFormData)
                   recalculateAmounts(nextFormData)
                 }}
@@ -336,7 +335,6 @@ function SalesInvoiceForm(props) {
                 prefix={<span>₹</span>}
                 value={formData.remainingBalance}
                 onChange={(remainingBalance) => {
-                  console.log('[remainingBalance++]', remainingBalance)
                   setFormData({ ...formData, remainingBalance })
                 }}
                 disabled
