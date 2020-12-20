@@ -22,7 +22,7 @@ export default function AppLayout(props) {
 
   const selectedKeys = {
     '/customer': '1',
-    '/customer-report': '1',
+    '/customer/report': '1',
     '/company': '2',
     '/company/report': '2',
     '/sales': '3',
