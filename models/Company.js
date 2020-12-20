@@ -1,3 +1,4 @@
+import round from 'lodash.round'
 import { Schema, connection, model as _model, models } from 'mongoose'
 import { initialize, plugin } from 'mongoose-auto-increment'
 
@@ -28,6 +29,11 @@ const CompanySchema = new Schema(
     address: {
       type: String,
       required: false,
+    },
+    outstandingAmount: {
+      type: Number,
+      default: 0,
+      set: (value) => round(value, 2),
     },
   },
   {

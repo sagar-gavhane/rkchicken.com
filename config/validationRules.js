@@ -51,6 +51,12 @@ const validationRules = {
     },
   ],
   password: [{ required: true, message: 'Please input your password!' }],
+  outstandingAmount: [
+    {
+      required: true,
+      message: 'Outstanding amount field is required.',
+    },
+  ],
   discountRate: [
     {
       required: true,

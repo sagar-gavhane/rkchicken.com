@@ -17,7 +17,7 @@ import customerService from 'services/customers'
 
 export default function CustomerPage() {
   const [showCustomerModal, setShowCustomerModal] = useState(false)
-  const [modalType, setModalType] = useState('')
+  const [modalType, setModalType] = useState('CREATE_CUSTOMER_MODAL')
   const [selectedCustomer, setSelectedCustomer] = useState({})
 
   const cache = useQueryCache()
@@ -58,6 +58,12 @@ export default function CustomerPage() {
       title: 'Discount rate',
       dataIndex: 'discountRate',
       key: 'discountRate',
+      render: (value) => `₹${round(value, 2)}`,
+    },
+    {
+      title: 'Outstanding amount',
+      dataIndex: 'outstandingAmount',
+      key: 'outstandingAmount',
       render: (value) => `₹${round(value, 2)}`,
     },
     {

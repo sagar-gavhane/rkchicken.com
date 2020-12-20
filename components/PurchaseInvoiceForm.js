@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
 import moment from 'moment'
+import produce from 'immer'
 import {
   Row,
   Col,
@@ -39,15 +40,25 @@ const initialFormData = {
   weight: 1,
   currentBillAmount: 0,
   paidAmount: 0,
+  outstandingAmount: 0,
 }
+
+const calculateOutstandingAmount = ({ currentBillAmount, paidAmount }) =>
+  currentBillAmount - paidAmount
 
 function PurchaseInvoiceForm(props) {
   const router = useRouter()
 
   const [formData, setFormData] = useState(() => {
-    return typeof props.invoice !== 'undefined'
-      ? props.invoice
-      : initialFormData
+    if (typeof props.invoice === 'undefined') {
+      return initialFormData
+    }
+
+    const nextFormData = produce(props.invoice, (draftState) => {
+      draftState.outstandingAmount = calculateOutstandingAmount(draftState)
+    })
+
+    return nextFormData
   })
 
   const [selectedCompany, setSelectedCompany] = useState(() => {
@@ -223,28 +234,49 @@ function PurchaseInvoiceForm(props) {
             </Form.Item>
             <Form.Item label='Current bill amount'>
               <Input
+                prefix={<span>₹</span>}
                 value={formData.currentBillAmount}
                 onChange={(e) => {
                   const currentBillAmount = +e.target.value
-                  const nextFormData = { ...formData, currentBillAmount }
+                  const outstandingAmount = calculateOutstandingAmount({
+                    currentBillAmount: currentBillAmount,
+                    paidAmount: formData.paidAmount,
+                  })
+
+                  const nextFormData = produce(formData, (draftState) => {
+                    draftState.currentBillAmount = currentBillAmount
+                    draftState.outstandingAmount = outstandingAmount
+                  })
+
                   setFormData(nextFormData)
                 }}
               />
             </Form.Item>
             <Form.Item label='Paid amount'>
               <Input
+                prefix={<span>₹</span>}
                 value={formData.paidAmount}
                 onChange={(e) => {
                   const paidAmount = +e.target.value
-                  const remainingBalance = formData.totalAmount - paidAmount
-                  const nextFormData = {
-                    ...formData,
+                  const outstandingAmount = calculateOutstandingAmount({
+                    currentBillAmount: formData.currentBillAmount,
                     paidAmount,
-                    remainingBalance,
-                  }
+                  })
+
+                  const nextFormData = produce(formData, (draftState) => {
+                    draftState.paidAmount = paidAmount
+                    draftState.outstandingAmount = outstandingAmount
+                  })
 
                   setFormData(nextFormData)
                 }}
+              />
+            </Form.Item>
+            <Form.Item label='Outstanding amount'>
+              <Input
+                value={formData.outstandingAmount}
+                prefix={<span>₹</span>}
+                disabled
               />
             </Form.Item>
             <Form.Item {...tailLayout}>
@@ -265,10 +297,11 @@ function PurchaseInvoiceForm(props) {
 
 PurchaseInvoiceForm.propTypes = {
   actionType: 'CREATE_INVOICE',
+  invoice: {},
 }
 
 PurchaseInvoiceForm.propTypes = {
-  invoice: PropTypes.object.isRequired,
+  invoice: PropTypes.object,
   actionType: PropTypes.oneOf(['CREATE_INVOICE', 'EDIT_INVOICE']).isRequired,
 }
 

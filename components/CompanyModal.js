@@ -16,6 +16,7 @@ const CompanyModal = (props) => {
     name: '',
     mobileNumber: '',
     address: '',
+    outstandingAmount: 0,
   }
 
   useEffect(() => {
@@ -83,6 +84,13 @@ const CompanyModal = (props) => {
           rules={validationRules.mobileNumber}
         >
           <Input type='number' />
+        </Form.Item>
+        <Form.Item
+          label='Outstanding amount'
+          name='outstandingAmount'
+          rules={validationRules.outstandingAmount}
+        >
+          <Input type='number' prefix={<span>₹</span>} />
         </Form.Item>
         <Form.Item label='Address' name='address'>
           <Input.TextArea rows={4} />

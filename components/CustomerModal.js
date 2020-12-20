@@ -16,6 +16,7 @@ const CustomerModal = (props) => {
     name: '',
     mobileNumber: '',
     alternativeMobileNumber: '',
+    outstandingAmount: 0,
     discountRate: 10,
   }
 
@@ -92,6 +93,13 @@ const CustomerModal = (props) => {
           rules={validationRules.alternativeMobileNumber}
         >
           <Input type='number' />
+        </Form.Item>
+        <Form.Item
+          label='Outstanding amount'
+          name='outstandingAmount'
+          rules={validationRules.outstandingAmount}
+        >
+          <Input type='number' prefix={<span>₹</span>} />
         </Form.Item>
         <Form.Item
           label='Discount rate'
