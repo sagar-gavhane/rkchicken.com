@@ -51,9 +51,11 @@ export default async function handler(req, res) {
 
         const purchaseInvoice = await PurchaseInvoiceModel(req.body).save()
 
-        await CompanyModel.findByIdAndUpdate(companyId, {
-          $inc: { outstandingAmount: req.body.outstandingAmount },
-        })
+        if (typeof req.body.outstandingAmount !== 'undefined') {
+          await CompanyModel.findByIdAndUpdate(companyId, {
+            $inc: { outstandingAmount: req.body.outstandingAmount },
+          })
+        }
 
         res.status(httpStatusCodes.OK).send({
           data: purchaseInvoice,
