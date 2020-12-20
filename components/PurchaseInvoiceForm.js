@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
 import moment from 'moment'
+import produce from 'immer'
 import {
   Row,
   Col,
@@ -39,15 +40,25 @@ const initialFormData = {
   weight: 1,
   currentBillAmount: 0,
   paidAmount: 0,
+  outstandingAmount: 0,
 }
+
+const calculateOutstandingAmount = ({ currentBillAmount, paidAmount }) =>
+  currentBillAmount - paidAmount
 
 function PurchaseInvoiceForm(props) {
   const router = useRouter()
 
   const [formData, setFormData] = useState(() => {
-    return typeof props.invoice !== 'undefined'
-      ? props.invoice
-      : initialFormData
+    if (typeof props.invoice === 'undefined') {
+      return initialFormData
+    }
+
+    const nextFormData = produce(props.invoice, (draftState) => {
+      draftState.outstandingAmount = calculateOutstandingAmount(draftState)
+    })
+
+    return nextFormData
   })
 
   const [selectedCompany, setSelectedCompany] = useState(() => {
@@ -93,7 +104,6 @@ function PurchaseInvoiceForm(props) {
       await purchaseService.invoice.update(props.invoice._id, {
         ...formData,
         companyId: selectedCompany._id,
-        outstandingAmount: formData.currentBillAmount - formData.paidAmount,
       })
       message.success('Purchase invoice has been updated.')
       cache.invalidateQueries(['/companies'])
@@ -108,7 +118,6 @@ function PurchaseInvoiceForm(props) {
       await purchaseService.invoice.create({
         ...formData,
         companyId: selectedCompany._id,
-        outstandingAmount: formData.currentBillAmount - formData.paidAmount,
       })
       message.success('Purchase invoice has been created.')
       cache.invalidateQueries(['/companies'])
@@ -228,7 +237,16 @@ function PurchaseInvoiceForm(props) {
                 value={formData.currentBillAmount}
                 onChange={(e) => {
                   const currentBillAmount = +e.target.value
-                  const nextFormData = { ...formData, currentBillAmount }
+                  const outstandingAmount = calculateOutstandingAmount({
+                    currentBillAmount: currentBillAmount,
+                    paidAmount: formData.paidAmount,
+                  })
+
+                  const nextFormData = produce(formData, (draftState) => {
+                    draftState.currentBillAmount = currentBillAmount
+                    draftState.outstandingAmount = outstandingAmount
+                  })
+
                   setFormData(nextFormData)
                 }}
               />
@@ -238,22 +256,22 @@ function PurchaseInvoiceForm(props) {
                 value={formData.paidAmount}
                 onChange={(e) => {
                   const paidAmount = +e.target.value
-                  const remainingBalance = formData.totalAmount - paidAmount
-                  const nextFormData = {
-                    ...formData,
+                  const outstandingAmount = calculateOutstandingAmount({
+                    currentBillAmount: formData.currentBillAmount,
                     paidAmount,
-                    remainingBalance,
-                  }
+                  })
+
+                  const nextFormData = produce(formData, (draftState) => {
+                    draftState.paidAmount = paidAmount
+                    draftState.outstandingAmount = outstandingAmount
+                  })
 
                   setFormData(nextFormData)
                 }}
               />
             </Form.Item>
             <Form.Item label='Outstanding amount'>
-              <Input
-                value={formData.currentBillAmount - formData.paidAmount}
-                disabled
-              />
+              <Input value={formData.outstandingAmount} disabled />
             </Form.Item>
             <Form.Item {...tailLayout}>
               <Button
