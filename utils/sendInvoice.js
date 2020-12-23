@@ -4,17 +4,16 @@ import { sendMessage } from 'utils/sendMessage'
 
 export function sendInvoice(customer, invoice) {
   const mobile = [customer.mobileNumber]
-  const message = `Invoice no: ${invoice.invoiceId}\nDate: ${format(
-    new Date(invoice.createdAt),
-    'dd/MM/yyyy'
-  )}\nToday Chicken Rate: 200\nWeight: ${
-    invoice.weight
-  }\nCurrent Bill Amount: ${invoice.currentBillAmount}\nPrevious bill amount: ${
-    invoice.outstandingAmount
-  }\nRemaing bill amount: ${invoice.remainingBalance}\nPaid bill amount: ${
-    invoice.paidAmount
-  }
-  `
+  const message = [
+    `Invoice no: ${invoice.invoiceId}`,
+    `Date: ${format(new Date(invoice.createdAt), 'dd/MM/yyyy')}`,
+    `Chicken rate: ${invoice.chickenRate}`,
+    `Weight: ${invoice.weight}`,
+    `Current bill amount: ${invoice.currentBillAmount}`,
+    `Previous bill amount: ${invoice.outstandingAmount}`,
+    `Remaing bill amount: ${invoice.remainingBalance}`,
+    `Paid bill amount: ${invoice.paidAmount}`,
+  ].join('\n')
 
   if (customer.alternativeMobileNumber) {
     mobile.push(customer.alternativeMobileNumber)
