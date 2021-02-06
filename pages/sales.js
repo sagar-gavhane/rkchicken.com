@@ -53,14 +53,43 @@ export default function SalesPage() {
       key: 'name',
     },
     {
-      title: 'Mobile number',
-      dataIndex: ['customer', 'mobileNumber'],
-      key: 'mobileNumber',
+      title: 'Birds No',
+      dataIndex: ['birdsNumber'],
+      key: 'birdsNumber',
+    },
+    {
+      title: 'Weight',
+      dataIndex: ['weight'],
+      key: 'weight',
     },
     {
       title: 'Discount rate',
       dataIndex: 'discountRate',
       key: 'discountRate',
+      render: (value) => `₹${round(value, 2)}`,
+    },
+    {
+      title: 'Current bill amount',
+      dataIndex: 'currentBillAmount',
+      key: 'currentBillAmount',
+      render: (value) => `₹${round(value, 2)}`,
+    },
+    {
+      title: 'Previous balance',
+      dataIndex: 'outstandingAmount',
+      key: 'outstandingAmount',
+      render: (value) => `₹${round(value, 2)}`,
+    },
+    {
+      title: 'Total amount',
+      dataIndex: 'totalAmount',
+      key: 'totalAmount',
+      render: (value) => `₹${round(value, 2)}`,
+    },
+    {
+      title: 'Paid amount',
+      dataIndex: 'paidAmount',
+      key: 'paidAmount',
       render: (value) => `₹${round(value, 2)}`,
     },
     {
