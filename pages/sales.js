@@ -69,18 +69,6 @@ export default function SalesPage() {
       render: (value) => `₹${round(value, 2)}`,
     },
     {
-      title: 'Created at',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      render: (createdAt) => `${moment(createdAt).fromNow()}`,
-    },
-    {
-      title: 'Updated at',
-      dataIndex: 'updatedAt',
-      key: 'updatedAt',
-      render: (updatedAt) => `${moment(updatedAt).fromNow()}`,
-    },
-    {
       title: 'Action',
       key: 'action',
       render: (text, record) => (
