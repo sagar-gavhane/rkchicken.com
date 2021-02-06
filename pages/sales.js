@@ -38,6 +38,7 @@ export default function SalesPage() {
       title: '#',
       dataIndex: 'invoiceId',
       key: 'invoiceId',
+      fixed: 'left',
     },
     {
       title: 'Date',
@@ -71,7 +72,7 @@ export default function SalesPage() {
     {
       title: 'Action',
       key: 'action',
-      render: (text, record) => (
+      fixed: 'right',
         <Space size='middle'>
           <Link href={`/sales/invoice/print/${record._id}`}>
             <Typography.Link>
