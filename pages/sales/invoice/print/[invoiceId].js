@@ -35,7 +35,7 @@ const InvoicePrintPage = () => {
   }
 
   return (
-    <div style={{ padding: '1rem', width: '50vw', border: '1px solid #eee' }}>
+    <div className='invoice-wrapper'>
       <Row justify='center'>
         <Col>
           <Space direction='vertical' align='center'>

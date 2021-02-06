@@ -48,3 +48,15 @@
   padding: 24px;
   min-height: 100%;
 }
+
+.invoice-wrapper {
+  padding: 1rem;
+  width: 100vw;
+  border: 1px solid #eee;
+}
+
+@media only screen and (min-width: 768px) {
+  .invoice-wrapper {
+    width: 50vw;
+  }
+}
