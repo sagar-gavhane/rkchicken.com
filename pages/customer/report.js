@@ -1,8 +1,10 @@
 import React from 'react'
 import Link from 'next/link'
 import moment from 'moment'
+import round from 'lodash.round'
+import sumBy from 'lodash.sumby'
+import papaparse from 'papaparse'
 import {
-  Breadcrumb,
   Col,
   Row,
   Table,
@@ -12,13 +14,35 @@ import {
   Button,
   Space,
   Typography,
+  message,
 } from 'antd'
-import { EyeOutlined } from '@ant-design/icons'
+import { EyeOutlined, ExportOutlined } from '@ant-design/icons'
 import { useQuery } from 'react-query'
 
 import AppLayout from 'components/AppLayout'
 import salesService from 'services/sales'
 import customerService from 'services/customers'
+
+function calculateSummary(invoices) {
+  const totalAmount = round(
+    sumBy(invoices, (invoice) => invoice.totalAmount),
+    2
+  )
+  const paidAmount = round(
+    sumBy(invoices, (invoice) => invoice.paidAmount),
+    2
+  )
+  const remainingBalance = round(
+    sumBy(invoices, (page) => page.remainingBalance),
+    2
+  )
+
+  return {
+    totalAmount,
+    paidAmount,
+    remainingBalance,
+  }
+}
 
 export default function CustomerReportPage() {
   const [form] = Form.useForm()
@@ -48,6 +72,43 @@ export default function CustomerReportPage() {
     }
   )
 
+  const exportCSV = () => {
+    try {
+      const { totalAmount, paidAmount, remainingBalance } = calculateSummary(
+        invoices
+      )
+
+      let csvContent = papaparse.unparse(
+        invoices.map((invoice) => {
+          return {
+            'Invoice number': invoice.invoiceId,
+            Date: `${moment(invoice.invoiceDate).format('DD/MM/YYYY')}`,
+            'Customer name': invoice.customer.name,
+            'Birds No': invoice.birdsNumber,
+            Weight: invoice.weight,
+            'Discount rate': invoice.discountRate,
+            'Current bill amount': invoice.currentBillAmount,
+            'Previous balance': invoice.outstandingAmount,
+            'Total amount': invoice.totalAmount,
+            'Paid amount': invoice.paidAmount,
+            'Outstanding amount': invoice.remainingBalance,
+          }
+        })
+      )
+      csvContent += `\nTotal,,,,,,,,${totalAmount},${paidAmount},${remainingBalance}`
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+      const url = URL.createObjectURL(blob)
+
+      let link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', `sheet-${moment().unix()}.csv`)
+      link.click()
+    } catch (err) {
+      message.error(err.message)
+    }
+  }
+
   const columns = [
     {
       title: 'Invoice number',
@@ -67,22 +128,50 @@ export default function CustomerReportPage() {
       key: 'customerName',
     },
     {
-      title: 'Bill amount',
+      title: 'Birds No',
+      dataIndex: 'birdsNumber',
+      key: 'birdsNumber',
+    },
+    {
+      title: 'Weight',
+      dataIndex: 'weight',
+      key: 'weight',
+    },
+    {
+      title: 'Discount rate',
+      dataIndex: 'discountRate',
+      key: 'discountRate',
+      render: (value) => `₹${round(value, 2)}`,
+    },
+    {
+      title: 'Current bill amount',
+      dataIndex: 'currentBillAmount',
+      key: 'currentBillAmount',
+      render: (value) => `₹${round(value, 2)}`,
+    },
+    {
+      title: 'Previous balance',
+      dataIndex: 'outstandingAmount',
+      key: 'outstandingAmount',
+      render: (value) => `₹${round(value, 2)}`,
+    },
+    {
+      title: 'Total amount',
       dataIndex: 'totalAmount',
       key: 'totalAmount',
-      render: (value) => `₹${value}`,
+      render: (value) => `₹${round(value, 2)}`,
     },
     {
-      title: 'Created at',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      render: (createdAt) => `${moment(createdAt).fromNow()}`,
+      title: 'Paid amount',
+      dataIndex: 'paidAmount',
+      key: 'paidAmount',
+      render: (value) => `₹${round(value, 2)}`,
     },
     {
-      title: 'Updated at',
-      dataIndex: 'updatedAt',
-      key: 'updatedAt',
-      render: (updatedAt) => `${moment(updatedAt).fromNow()}`,
+      title: 'Outstanding amount',
+      dataIndex: 'remainingBalance',
+      key: 'remainingBalance',
+      render: (value) => `₹${round(value, 2)}`,
     },
     {
       title: 'Action',
@@ -101,70 +190,94 @@ export default function CustomerReportPage() {
 
   return (
     <AppLayout>
-      <Space direction='vertical'>
-        <Breadcrumb>
-          <Breadcrumb.Item>
-            <Link href='/customer'>
-              <a>Customer</a>
-            </Link>
-          </Breadcrumb.Item>
-          <Breadcrumb.Item>Report</Breadcrumb.Item>
-        </Breadcrumb>
-        <Row>
-          <Col style={{ margin: '1rem 0' }}>
-            <Form
-              layout='inline'
-              name='customer-report-form'
-              requiredMark={false}
-              initialValues={{ customerId: null, dateRange: [] }}
-              form={form}
-              onFinish={async () => {
-                refetch()
-              }}
+      <Row>
+        <Col style={{ margin: '1rem 0' }}>
+          <Form
+            layout='inline'
+            name='customer-report-form'
+            requiredMark={false}
+            initialValues={{ customerId: null, dateRange: [] }}
+            form={form}
+            onFinish={async () => {
+              refetch()
+            }}
+          >
+            <Form.Item
+              label='Customer name'
+              name='customerId'
+              rules={[
+                { required: true, message: 'Customer field is required.' },
+              ]}
             >
-              <Form.Item
-                label='Customer name'
-                name='customerId'
-                rules={[
-                  { required: true, message: 'Customer field is required.' },
-                ]}
-              >
-                <Select placeholder='Select customer'>
-                  {Array.isArray(customers) &&
-                    customers.map((customer) => (
-                      <Select.Option key={customer._id} value={customer._id}>
-                        {customer.name}
-                      </Select.Option>
-                    ))}
-                </Select>
-              </Form.Item>
-              <Form.Item
-                label='Date range'
-                name='dateRange'
-                rules={[
-                  {
-                    required: true,
-                    message: 'Date range field is required.',
-                  },
-                ]}
-              >
-                <DatePicker.RangePicker />
-              </Form.Item>
-              <Form.Item>
-                <Button type='primary' htmlType='submit'>
-                  Filter
-                </Button>
-              </Form.Item>
-            </Form>
-          </Col>
-        </Row>
-      </Space>
+              <Select placeholder='Select customer'>
+                {Array.isArray(customers) &&
+                  customers.map((customer) => (
+                    <Select.Option key={customer._id} value={customer._id}>
+                      {customer.name}
+                    </Select.Option>
+                  ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              label='Date range'
+              name='dateRange'
+              rules={[
+                {
+                  required: true,
+                  message: 'Date range field is required.',
+                },
+              ]}
+            >
+              <DatePicker.RangePicker />
+            </Form.Item>
+            <Form.Item>
+              <Button type='primary' htmlType='submit'>
+                Filter
+              </Button>
+            </Form.Item>
+          </Form>
+        </Col>
+      </Row>
+      <Button
+        style={{ marginBottom: '1rem' }}
+        icon={<ExportOutlined />}
+        onClick={exportCSV}
+        disabled={!form.getFieldValue('customerId')}
+      >
+        Export CSV
+      </Button>
       <Table
         scroll={{ x: true }}
         loading={isLoading}
         columns={columns}
         dataSource={invoices}
         bordered
+        pagination={!form.getFieldValue('customerId')}
+        summary={(record) => {
+          const {
+            totalAmount,
+            paidAmount,
+            remainingBalance,
+          } = calculateSummary(record)
+
+          return (
+            <Table.Summary.Row style={{ backgroundColor: '#f5f5f5' }}>
+              <Table.Summary.Cell colSpan={8}>Total</Table.Summary.Cell>
+              <Table.Summary.Cell>
+                <Typography.Text>₹{totalAmount}</Typography.Text>
+              </Table.Summary.Cell>
+              <Table.Summary.Cell>
+                <Typography.Text>₹{paidAmount}</Typography.Text>
+              </Table.Summary.Cell>
+              <Table.Summary.Cell>
+                <Typography.Text>₹{remainingBalance}</Typography.Text>
+              </Table.Summary.Cell>
+              <Table.Summary.Cell>
+                <Typography.Text />
+              </Table.Summary.Cell>
+            </Table.Summary.Row>
+          )
+        }}
       />
     </AppLayout>
   )
