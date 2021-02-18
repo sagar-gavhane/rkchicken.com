@@ -37,9 +37,9 @@ export default function AppLayout(props) {
 
   return (
     <Layout id='components-layout-demo-responsive'>
-      <Sider breakpoint='md' collapsedWidth='0'>
+      <Sider defaultCollapsed={true}>
         <Link href='/customer'>
-          <a className='logo'>RKChicken</a>
+          <a className='logo'>RK</a>
         </Link>
         <Menu
           theme='dark'

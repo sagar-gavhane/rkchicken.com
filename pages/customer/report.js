@@ -24,23 +24,18 @@ import salesService from 'services/sales'
 import customerService from 'services/customers'
 
 function calculateSummary(invoices) {
-  const totalAmount = round(
-    sumBy(invoices, (invoice) => invoice.totalAmount),
-    2
-  )
   const paidAmount = round(
     sumBy(invoices, (invoice) => invoice.paidAmount),
     2
   )
-  const remainingBalance = round(
-    sumBy(invoices, (page) => page.remainingBalance),
-    2
+
+  const totalCurrentBillAmount = round(
+    sumBy(invoices, (page) => page.currentBillAmount)
   )
 
   return {
-    totalAmount,
     paidAmount,
-    remainingBalance,
+    totalCurrentBillAmount,
   }
 }
 
@@ -74,9 +69,7 @@ export default function CustomerReportPage() {
 
   const exportCSV = () => {
     try {
-      const { totalAmount, paidAmount, remainingBalance } = calculateSummary(
-        invoices
-      )
+      const { paidAmount, totalCurrentBillAmount } = calculateSummary(invoices)
 
       let csvContent = papaparse.unparse(
         invoices.map((invoice) => {
@@ -95,7 +88,7 @@ export default function CustomerReportPage() {
           }
         })
       )
-      csvContent += `\nTotal,,,,,,,,${totalAmount},${paidAmount},${remainingBalance}`
+      csvContent += `\nTotal,,,,,,${totalCurrentBillAmount},,,${paidAmount},,`
 
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
       const url = URL.createObjectURL(blob)
@@ -254,26 +247,24 @@ export default function CustomerReportPage() {
         bordered
         pagination={!form.getFieldValue('customerId')}
         summary={(record) => {
-          const {
-            totalAmount,
-            paidAmount,
-            remainingBalance,
-          } = calculateSummary(record)
+          const { paidAmount, totalCurrentBillAmount } = calculateSummary(
+            record
+          )
 
           return (
             <Table.Summary.Row style={{ backgroundColor: '#f5f5f5' }}>
-              <Table.Summary.Cell colSpan={8}>Total</Table.Summary.Cell>
+              <Table.Summary.Cell colSpan={6}>Total</Table.Summary.Cell>
               <Table.Summary.Cell>
-                <Typography.Text>₹{totalAmount}</Typography.Text>
+                <Typography.Text>₹{totalCurrentBillAmount}</Typography.Text>
+              </Table.Summary.Cell>
+              <Table.Summary.Cell colSpan={2}>
+                <Typography.Text></Typography.Text>
               </Table.Summary.Cell>
               <Table.Summary.Cell>
                 <Typography.Text>₹{paidAmount}</Typography.Text>
               </Table.Summary.Cell>
-              <Table.Summary.Cell>
-                <Typography.Text>₹{remainingBalance}</Typography.Text>
-              </Table.Summary.Cell>
-              <Table.Summary.Cell>
-                <Typography.Text />
+              <Table.Summary.Cell colSpan={2}>
+                <Typography.Text></Typography.Text>
               </Table.Summary.Cell>
             </Table.Summary.Row>
           )
