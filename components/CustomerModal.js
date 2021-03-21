@@ -98,7 +98,7 @@ const CustomerModal = (props) => {
           name='outstandingAmount'
           rules={validationRules.outstandingAmount}
         >
-          <Input type='number' prefix={<span>₹</span>} />
+          <Input type='number' prefix={<span>Rs.</span>} />
         </Form.Item>
         <Form.Item
           label='Discount rate'
@@ -107,7 +107,7 @@ const CustomerModal = (props) => {
         >
           <Input
             type='number'
-            prefix={<span>₹</span>}
+            prefix={<span>Rs.</span>}
             defaultValue={10}
             min={0}
           />

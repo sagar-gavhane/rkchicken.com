@@ -50,19 +50,19 @@ export default function PurchasePage() {
       title: 'Chicken rate',
       dataIndex: 'chickenRate',
       name: 'chickenRate',
-      render: (value) => `₹${round(value, 2)}`,
+      render: (value) => `Rs.${round(value, 2)}`,
     },
     {
       title: 'Current bill amount',
       dataIndex: 'currentBillAmount',
       name: 'currentBillAmount',
-      render: (value) => `₹${round(value, 2)}`,
+      render: (value) => `Rs.${round(value, 2)}`,
     },
     {
       title: 'Paid amount',
       dataIndex: 'paidAmount',
       name: 'paidAmount',
-      render: (value) => `₹${round(value, 2)}`,
+      render: (value) => `Rs.${round(value, 2)}`,
     },
     {
       title: 'Created at',

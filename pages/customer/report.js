@@ -134,37 +134,37 @@ export default function CustomerReportPage() {
       title: 'Discount rate',
       dataIndex: 'discountRate',
       key: 'discountRate',
-      render: (value) => `₹${round(value, 2)}`,
+      render: (value) => `Rs.${round(value, 2)}`,
     },
     {
       title: 'Current bill amount',
       dataIndex: 'currentBillAmount',
       key: 'currentBillAmount',
-      render: (value) => `₹${round(value, 2)}`,
+      render: (value) => `Rs.${round(value, 2)}`,
     },
     {
       title: 'Previous balance',
       dataIndex: 'outstandingAmount',
       key: 'outstandingAmount',
-      render: (value) => `₹${round(value, 2)}`,
+      render: (value) => `Rs.${round(value, 2)}`,
     },
     {
       title: 'Total amount',
       dataIndex: 'totalAmount',
       key: 'totalAmount',
-      render: (value) => `₹${round(value, 2)}`,
+      render: (value) => `Rs.${round(value, 2)}`,
     },
     {
       title: 'Paid amount',
       dataIndex: 'paidAmount',
       key: 'paidAmount',
-      render: (value) => `₹${round(value, 2)}`,
+      render: (value) => `Rs.${round(value, 2)}`,
     },
     {
       title: 'Outstanding amount',
       dataIndex: 'remainingBalance',
       key: 'remainingBalance',
-      render: (value) => `₹${round(value, 2)}`,
+      render: (value) => `Rs.${round(value, 2)}`,
     },
     {
       title: 'Action',
@@ -255,13 +255,13 @@ export default function CustomerReportPage() {
             <Table.Summary.Row style={{ backgroundColor: '#f5f5f5' }}>
               <Table.Summary.Cell colSpan={6}>Total</Table.Summary.Cell>
               <Table.Summary.Cell>
-                <Typography.Text>₹{totalCurrentBillAmount}</Typography.Text>
+                <Typography.Text>Rs.{totalCurrentBillAmount}</Typography.Text>
               </Table.Summary.Cell>
               <Table.Summary.Cell colSpan={2}>
                 <Typography.Text></Typography.Text>
               </Table.Summary.Cell>
               <Table.Summary.Cell>
-                <Typography.Text>₹{paidAmount}</Typography.Text>
+                <Typography.Text>Rs.{paidAmount}</Typography.Text>
               </Table.Summary.Cell>
               <Table.Summary.Cell colSpan={2}>
                 <Typography.Text></Typography.Text>

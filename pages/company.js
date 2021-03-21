@@ -53,7 +53,7 @@ export default function CompanyPage() {
       title: 'Outstanding amount',
       dataIndex: 'outstandingAmount',
       name: 'outstandingAmount',
-      render: (value) => `₹${round(value ?? 0, 2)}`,
+      render: (value) => `Rs.${round(value ?? 0, 2)}`,
     },
     {
       title: 'Created at',

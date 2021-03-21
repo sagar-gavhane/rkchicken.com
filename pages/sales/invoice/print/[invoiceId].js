@@ -78,22 +78,22 @@ const InvoicePrintPage = () => {
               {invoice.weight}
             </Descriptions.Item>
             <Descriptions.Item label='Customer discount rate'>
-              ₹{invoice.discountRate}
+              Rs.{invoice.discountRate}
             </Descriptions.Item>
             <Descriptions.Item label='Current bill amount'>
-              ₹{invoice.currentBillAmount}
+              Rs.{invoice.currentBillAmount}
             </Descriptions.Item>
             <Descriptions.Item label='Previous balance'>
-              ₹{invoice.outstandingAmount}
+              Rs.{invoice.outstandingAmount}
             </Descriptions.Item>
             <Descriptions.Item label='Total amount'>
-              ₹{invoice.totalAmount}
+              Rs.{invoice.totalAmount}
             </Descriptions.Item>
             <Descriptions.Item label='Paid amount'>
-              ₹{invoice.paidAmount}
+              Rs.{invoice.paidAmount}
             </Descriptions.Item>
             <Descriptions.Item label='Remaining balance'>
-              ₹{invoice.remainingBalance}
+              Rs.{invoice.remainingBalance}
             </Descriptions.Item>
           </Descriptions>
           <p

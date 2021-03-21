@@ -70,13 +70,13 @@ export default function CompanyReportPage() {
       title: 'Current bill amount',
       dataIndex: 'currentBillAmount',
       name: 'currentBillAmount',
-      render: (value) => `₹${round(value, 2)}`,
+      render: (value) => `Rs.${round(value, 2)}`,
     },
     {
       title: 'Paid amount',
       dataIndex: 'paidAmount',
       name: 'paidAmount',
-      render: (value) => `₹${round(value, 2)}`,
+      render: (value) => `Rs.${round(value, 2)}`,
     },
     {
       title: 'Created at',

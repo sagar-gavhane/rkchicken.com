@@ -234,7 +234,7 @@ function PurchaseInvoiceForm(props) {
             </Form.Item>
             <Form.Item label='Current bill amount'>
               <Input
-                prefix={<span>₹</span>}
+                prefix={<span>Rs.</span>}
                 value={formData.currentBillAmount}
                 onChange={(e) => {
                   const currentBillAmount = +e.target.value
@@ -254,7 +254,7 @@ function PurchaseInvoiceForm(props) {
             </Form.Item>
             <Form.Item label='Paid amount'>
               <Input
-                prefix={<span>₹</span>}
+                prefix={<span>Rs.</span>}
                 value={formData.paidAmount}
                 onChange={(e) => {
                   const paidAmount = +e.target.value
@@ -275,7 +275,7 @@ function PurchaseInvoiceForm(props) {
             <Form.Item label='Outstanding amount'>
               <Input
                 value={formData.outstandingAmount}
-                prefix={<span>₹</span>}
+                prefix={<span>Rs.</span>}
                 disabled
               />
             </Form.Item>

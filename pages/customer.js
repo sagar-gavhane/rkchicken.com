@@ -58,13 +58,13 @@ export default function CustomerPage() {
       title: 'Discount rate',
       dataIndex: 'discountRate',
       key: 'discountRate',
-      render: (value) => `₹${round(value, 2)}`,
+      render: (value) => `Rs.${round(value, 2)}`,
     },
     {
       title: 'Outstanding amount',
       dataIndex: 'outstandingAmount',
       key: 'outstandingAmount',
-      render: (value) => `₹${round(value, 2)}`,
+      render: (value) => `Rs.${round(value, 2)}`,
     },
     {
       title: 'Created at',

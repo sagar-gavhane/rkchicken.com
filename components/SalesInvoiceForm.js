@@ -270,8 +270,8 @@ function SalesInvoiceForm(props) {
               <InputNumber
                 min={0}
                 value={formData.discountRate}
-                formatter={(value) => `₹${value}`}
-                parser={(value) => value.replace('₹', '')}
+                formatter={(value) => `Rs.${value}`}
+                parser={(value) => value.replace('Rs.', '')}
                 onChange={async (discountRate) => {
                   const nextFormData = { ...formData, discountRate }
                   setFormData(nextFormData)
@@ -281,7 +281,7 @@ function SalesInvoiceForm(props) {
             </Form.Item>
             <Form.Item label='Current bill amount'>
               <Input
-                prefix={<span>₹</span>}
+                prefix={<span>Rs.</span>}
                 value={formData.currentBillAmount}
                 onChange={(e) => {
                   const currentBillAmount = +e.target.value
@@ -294,7 +294,7 @@ function SalesInvoiceForm(props) {
             </Form.Item>
             <Form.Item label='Previous amount'>
               <Input
-                prefix={<span>₹</span>}
+                prefix={<span>Rs.</span>}
                 value={formData.outstandingAmount}
                 onChange={(outstandingAmount) =>
                   setFormData({ ...formData, outstandingAmount })
@@ -304,7 +304,7 @@ function SalesInvoiceForm(props) {
             </Form.Item>
             <Form.Item label='Total amount'>
               <Input
-                prefix={<span>₹</span>}
+                prefix={<span>Rs.</span>}
                 value={formData.totalAmount}
                 onChange={(totalAmount) =>
                   setFormData({ ...formData, totalAmount })
@@ -314,7 +314,7 @@ function SalesInvoiceForm(props) {
             </Form.Item>
             <Form.Item label='Paid amount'>
               <Input
-                prefix={<span>₹</span>}
+                prefix={<span>Rs.</span>}
                 value={formData.paidAmount}
                 onChange={(e) => {
                   const paidAmount = +e.target.value
@@ -332,7 +332,7 @@ function SalesInvoiceForm(props) {
             </Form.Item>
             <Form.Item label='Remaining balance'>
               <Input
-                prefix={<span>₹</span>}
+                prefix={<span>Rs.</span>}
                 value={formData.remainingBalance}
                 onChange={(remainingBalance) => {
                   setFormData({ ...formData, remainingBalance })
