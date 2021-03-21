@@ -2,6 +2,8 @@ import size from 'lodash.size'
 import { isEqual, subDays, set } from 'date-fns'
 import { Types } from 'mongoose'
 
+import isValidObjectId from 'utils/isValidObjectId'
+
 export const invoiceFilter = (query) => {
   const { customerId, from, to } = query
 
@@ -10,9 +12,11 @@ export const invoiceFilter = (query) => {
   return {
     $match: {
       $and: [
-        {
-          customerId: Types.ObjectId(customerId),
-        },
+        isValidObjectId(query.customerId)
+          ? {
+              customerId: Types.ObjectId(customerId),
+            }
+          : null,
         {
           invoiceDate: isEqual(new Date(to), new Date(from))
             ? {
@@ -30,7 +34,7 @@ export const invoiceFilter = (query) => {
                 }),
               },
         },
-      ],
+      ].filter(Boolean),
     },
   }
 }

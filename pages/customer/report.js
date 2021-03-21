@@ -203,6 +203,9 @@ export default function CustomerReportPage() {
               ]}
             >
               <Select placeholder='Select customer'>
+                <Select.Option value='ALL_CUSTOMER'>
+                  All Customers
+                </Select.Option>
                 {Array.isArray(customers) &&
                   customers.map((customer) => (
                     <Select.Option key={customer._id} value={customer._id}>
