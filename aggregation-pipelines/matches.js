@@ -13,8 +13,8 @@ export const invoiceFilter = (query) => {
       $match: {
         invoiceDate: isEqual(new Date(to), new Date(from))
           ? {
+              $lte: set(new Date(to), { hours: 24 }),
               $gte: set(new Date(to), { hours: 0 }),
-              $lt: set(new Date(to), { hours: 24 }),
             }
           : {
               $lte: set(new Date(to), { hours: 24 }),
