@@ -3,8 +3,6 @@ import { isEqual, subDays, set } from 'date-fns'
 import { Types } from 'mongoose'
 import isValidObjectId from 'utils/isValidObjectId'
 
-import isValidObjectId from 'utils/isValidObjectId'
-
 export const invoiceFilter = (query) => {
   const { customerId, from, to } = query
 
