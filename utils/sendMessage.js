@@ -16,7 +16,7 @@ export async function sendMessage({ message, mobile }) {
         message,
         sender,
         type: 3,
-        template_id: '1507160871180054308',
+        template_id: '1507161761552714430',
       },
     },
     {
