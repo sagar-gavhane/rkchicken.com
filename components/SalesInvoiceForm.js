@@ -107,7 +107,7 @@ function SalesInvoiceForm(props) {
   useEffect(() => {
     if (size(selectedCustomer)) {
       const currentBillAmount =
-        formData.weight * formData.chickenRate - selectedCustomer.discountRate
+        formData.weight * (formData.chickenRate - selectedCustomer.discountRate)
       const totalAmount = currentBillAmount + selectedCustomer.outstandingAmount
       const remainingBalance = totalAmount - formData.paidAmount
 
