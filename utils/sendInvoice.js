@@ -14,8 +14,8 @@ export function sendInvoice(customer, invoice) {
     `Weight: ${invoice.weight}`,
     `Current Bill Amount: ${invoice.currentBillAmount}`,
     `Previous bill amount: ${invoice.outstandingAmount}`,
-    `Remaining bill amount: ${invoice.remainingBalance}`,
     `Paid bill amount: ${invoice.paidAmount}`,
+    `Remaining bill amount: ${invoice.remainingBalance}`,
   ].join('\n')
 
   if (customer.alternativeMobileNumber) {
