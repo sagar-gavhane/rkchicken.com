@@ -1,4 +1,5 @@
 import httpStatusCodes from 'http-status-codes'
+import isNumber from 'lodash.isnumber'
 import { Types } from 'mongoose'
 
 import CustomerModel from 'models/Customer'
@@ -17,16 +18,29 @@ export default async function handler(req, res) {
   switch (req.method) {
     case 'GET': {
       try {
+        const offset = isNumber(+req.query.offset) ? +req.query.offset : 0
+        const limit = isNumber(+req.query.limit) ? +req.query.limit : 10
+
         const pipeline = [
           customerLookup,
           invoiceFilter(req.query),
+          { $skip: offset },
+          { $limit: limit },
           invoiceProjection,
         ].filter(Boolean)
+
+        const [{ total } = {}] = await InvoiceModel.aggregate(
+          [
+            customerLookup,
+            invoiceFilter(req.query),
+            { $count: 'total' },
+          ].filter(Boolean)
+        )
 
         const invoices = await InvoiceModel.aggregate(pipeline)
 
         res.status(httpStatusCodes.OK).send({
-          data: invoices,
+          data: { invoices, total },
           message: 'Invoice has been successfully retrieved.',
         })
       } catch (err) {

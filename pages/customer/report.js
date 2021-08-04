@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import moment from 'moment'
 import round from 'lodash.round'
@@ -18,10 +18,12 @@ import {
 } from 'antd'
 import { EyeOutlined, ExportOutlined } from '@ant-design/icons'
 import { useQuery } from 'react-query'
+import qs from 'query-string'
 
 import AppLayout from 'components/AppLayout'
 import salesService from 'services/sales'
 import customerService from 'services/customers'
+import getOffset from 'utils/getOffset'
 
 function calculateSummary(invoices) {
   const paidAmount = round(
@@ -41,33 +43,49 @@ function calculateSummary(invoices) {
 
 export default function CustomerReportPage() {
   const [form] = Form.useForm()
+  const [pagination, setPagination] = useState({ pageSize: 10, current: 1 })
 
   const { data: customers } = useQuery(['/customers'], () =>
     customerService.get()
   )
-  const { data: invoices, isLoading, refetch } = useQuery(
+  const {
+    data: invoices,
+    isLoading,
+    refetch,
+  } = useQuery(
     [
       '/sales/invoice',
       {
         customerId: form.getFieldValue('customerId'),
         dateRange: form.getFieldValue('dateRange'),
+        pagination,
       },
     ],
-    (_, { customerId, dateRange }) => {
+    (_, { customerId, dateRange, pagination }) => {
+      const limit = pagination.pageSize
+      const offset = getOffset(pagination)
+
       if (customerId && dateRange?.length > 0) {
         const [from, to] = dateRange
-        const params = `?customerId=${customerId}&from=${from}&to=${to}`
+        const params = qs.stringify(
+          { customerId, from, to, limit, offset },
+          { skipNull: true, skipEmptyString: true }
+        )
+
         return salesService.invoice.list(params)
       } else {
-        return salesService.invoice.list()
+        const params = qs.stringify(
+          { limit, offset },
+          { skipNull: true, skipEmptyString: true }
+        )
+
+        return salesService.invoice.list(params)
       }
     },
-    {
-      staleTime: 0,
-    }
+    { staleTime: 0 }
   )
 
-  const exportCSV = () => {
+  const exportCSV = (invoices) => {
     try {
       const { paidAmount, totalCurrentBillAmount } = calculateSummary(invoices)
 
@@ -100,6 +118,11 @@ export default function CustomerReportPage() {
     } catch (err) {
       message.error(err.message)
     }
+  }
+
+  const handleTableChange = (pagination) => {
+    const { current, pageSize } = pagination
+    setPagination({ current, pageSize })
   }
 
   const columns = [
@@ -237,7 +260,7 @@ export default function CustomerReportPage() {
       <Button
         style={{ marginBottom: '1rem' }}
         icon={<ExportOutlined />}
-        onClick={exportCSV}
+        onClick={() => exportCSV(invoices?.invoices)}
         disabled={!form.getFieldValue('customerId')}
       >
         Export CSV
@@ -246,13 +269,18 @@ export default function CustomerReportPage() {
         scroll={{ x: true }}
         loading={isLoading}
         columns={columns}
-        dataSource={invoices}
+        dataSource={invoices?.invoices}
         bordered
-        pagination={!form.getFieldValue('customerId')}
+        // pagination={!form.getFieldValue('customerId')}
+        pagination={{
+          current: pagination.current,
+          pageSize: pagination.pageSize,
+          ...(invoices?.total && { total: invoices.total }),
+        }}
+        onChange={handleTableChange}
         summary={(record) => {
-          const { paidAmount, totalCurrentBillAmount } = calculateSummary(
-            record
-          )
+          const { paidAmount, totalCurrentBillAmount } =
+            calculateSummary(record)
 
           return (
             <Table.Summary.Row style={{ backgroundColor: '#f5f5f5' }}>

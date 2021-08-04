@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import moment from 'moment'
 import round from 'lodash.round'
@@ -9,18 +9,28 @@ import {
   EyeOutlined,
   DeleteOutlined,
 } from '@ant-design/icons'
+import qs from 'query-string'
 import { useQuery, useQueryCache } from 'react-query'
 import { useRouter } from 'next/router'
 
 import AppLayout from 'components/AppLayout'
 import salesService from 'services/sales'
+import getOffset from 'utils/getOffset'
 
 export default function SalesPage() {
   const router = useRouter()
   const cache = useQueryCache()
+  const [pagination, setPagination] = useState({ current: 1, pageSize: 10 })
 
-  const { data, isLoading } = useQuery(['/sales/invoice'], () =>
-    salesService.invoice.list()
+  const { data, isLoading } = useQuery(
+    ['/sales/invoice', { pagination }],
+    () => {
+      const limit = pagination.pageSize
+      const offset = getOffset(pagination)
+
+      const params = qs.stringify({ limit, offset })
+      return salesService.invoice.list(params)
+    }
   )
 
   const handleDeleteInvoice = async (invoiceId) => {
@@ -31,6 +41,11 @@ export default function SalesPage() {
     } catch (err) {
       message.error(err.message)
     }
+  }
+
+  const handleTableChange = (pagination) => {
+    const { current, pageSize } = pagination
+    setPagination({ current, pageSize })
   }
 
   const columns = [
@@ -143,7 +158,13 @@ export default function SalesPage() {
         scroll={{ x: true }}
         loading={isLoading}
         columns={columns}
-        dataSource={data}
+        dataSource={data?.invoices}
+        pagination={{
+          pageSize: pagination.pageSize,
+          current: pagination.current,
+          ...(data?.total && { total: data.total }),
+        }}
+        onChange={handleTableChange}
         bordered
       />
     </AppLayout>

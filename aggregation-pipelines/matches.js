@@ -7,6 +7,7 @@ export const invoiceFilter = (query) => {
   const { customerId, from, to } = query
 
   if (!size(query)) return null
+  if (!from && !to) return null
 
   if (!isValidObjectId(customerId)) {
     return {

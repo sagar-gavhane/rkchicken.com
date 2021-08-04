@@ -7,7 +7,7 @@ class Sales {
         return Axios.get(`/sales/invoices`).then((r) => r.data.data)
       }
 
-      return Axios.get(`/sales/invoices${params}`).then((r) => r.data.data)
+      return Axios.get(`/sales/invoices?${params}`).then((r) => r.data.data)
     },
     create: (payload) =>
       Axios.post('/sales/invoices', payload).then((r) => r.data.data),

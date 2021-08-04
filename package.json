@@ -17,6 +17,7 @@
     "http-errors": "^1.8.0",
     "http-status-codes": "^2.1.4",
     "immer": "^8.0.0",
+    "lodash.isnumber": "^3.0.3",
     "lodash.round": "^4.0.4",
     "lodash.size": "^4.2.0",
     "lodash.sumby": "^4.6.0",
