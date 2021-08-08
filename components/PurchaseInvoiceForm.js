@@ -17,12 +17,13 @@ import {
   message,
   DatePicker,
 } from 'antd'
-import { useQuery, useQueryCache } from 'react-query'
+import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
 
 import AppLayout from 'components/AppLayout'
 import purchaseService from 'services/purchases'
 import companyService from 'services/company'
+import queryCache from 'utils/queryCache'
 
 const layout = {
   labelCol: { span: 8 },
@@ -69,8 +70,6 @@ function PurchaseInvoiceForm(props) {
     companyService.get()
   )
 
-  const cache = useQueryCache()
-
   const handleChange = (_, option) => {
     if (!option) {
       setSelectedCompany({})
@@ -106,9 +105,9 @@ function PurchaseInvoiceForm(props) {
         companyId: selectedCompany._id,
       })
       message.success('Purchase invoice has been updated.')
-      cache.invalidateQueries(['/companies'])
-      cache.invalidateQueries(['/purchases/invoices'])
-      cache.invalidateQueries([
+      queryCache.invalidateQueries(['/companies'])
+      queryCache.invalidateQueries(['/purchases/invoices'])
+      queryCache.invalidateQueries([
         '/purchases/invoices',
         { invoiceId: props.invoice._id },
       ])
@@ -120,8 +119,8 @@ function PurchaseInvoiceForm(props) {
         companyId: selectedCompany._id,
       })
       message.success('Purchase invoice has been created.')
-      cache.invalidateQueries(['/companies'])
-      cache.invalidateQueries(['/purchases/invoices'])
+      queryCache.invalidateQueries(['/companies'])
+      queryCache.invalidateQueries(['/purchases/invoices'])
 
       router.push('/purchase')
     }

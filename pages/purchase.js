@@ -4,15 +4,15 @@ import Link from 'next/link'
 import round from 'lodash.round'
 import { Table, Space, Typography, Popconfirm, Button, message } from 'antd'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
-import { useQuery, useQueryCache } from 'react-query'
+import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
 
 import AppLayout from 'components/AppLayout'
 import purchaseService from 'services/purchases'
+import queryCache from 'utils/queryCache'
 
 export default function PurchasePage() {
   const router = useRouter()
-  const cache = useQueryCache()
 
   const { data, isLoading } = useQuery(['/purchases/invoices'], () => {
     return purchaseService.invoice.list()
@@ -22,7 +22,7 @@ export default function PurchasePage() {
     try {
       await purchaseService.invoice.delete(invoiceId)
       message.success('Purchase invoice deleted successfully.')
-      cache.invalidateQueries(['/purchases/invoices'])
+      queryCache.invalidateQueries(['/purchases/invoices'])
     } catch (err) {
       message.error(err.message)
     }

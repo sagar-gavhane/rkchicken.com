@@ -17,12 +17,13 @@ import {
   message,
   DatePicker,
 } from 'antd'
-import { useQuery, useQueryCache } from 'react-query'
+import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
 
 import AppLayout from 'components/AppLayout'
 import salesService from 'services/sales'
 import customerService from 'services/customers'
+import queryCache from 'utils/queryCache'
 
 const layout = {
   labelCol: { span: 8 },
@@ -62,8 +63,6 @@ function SalesInvoiceForm(props) {
   const { data: customers } = useQuery(['/customers'], () =>
     customerService.get()
   )
-
-  const cache = useQueryCache()
 
   const handleChange = (_, option) => {
     if (!option) {
@@ -137,9 +136,9 @@ function SalesInvoiceForm(props) {
         outstandingAmount: selectedCustomer.outstandingAmount,
       })
       message.success('Sales invoice has been updated.')
-      cache.invalidateQueries(['/customers'])
-      cache.invalidateQueries(['/sales/invoice'])
-      cache.invalidateQueries([
+      queryCache.invalidateQueries(['/customers'])
+      queryCache.invalidateQueries(['/sales/invoice'])
+      queryCache.invalidateQueries([
         '/sales/invoice/',
         { invoiceId: props.invoice._id },
       ])
@@ -152,8 +151,8 @@ function SalesInvoiceForm(props) {
         outstandingAmount: selectedCustomer.outstandingAmount,
       })
       message.success('Sales invoice has been created.')
-      cache.invalidateQueries(['/customers'])
-      cache.invalidateQueries(['/sales/invoice'])
+      queryCache.invalidateQueries(['/customers'])
+      queryCache.invalidateQueries(['/sales/invoice'])
 
       router.push('/sales')
     }

@@ -10,16 +10,16 @@ import {
   DeleteOutlined,
 } from '@ant-design/icons'
 import qs from 'query-string'
-import { useQuery, useQueryCache } from 'react-query'
+import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
 
 import AppLayout from 'components/AppLayout'
 import salesService from 'services/sales'
 import getOffset from 'utils/getOffset'
+import queryCache from 'utils/queryCache'
 
 export default function SalesPage() {
   const router = useRouter()
-  const cache = useQueryCache()
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 })
 
   const { data, isLoading } = useQuery(
@@ -37,7 +37,7 @@ export default function SalesPage() {
     try {
       await salesService.invoice.delete(invoiceId)
       message.success('Sales invoice deleted successfully.')
-      cache.invalidateQueries(['/sales/invoice'])
+      queryCache.invalidateQueries(['/sales/invoice'])
     } catch (err) {
       message.error(err.message)
     }

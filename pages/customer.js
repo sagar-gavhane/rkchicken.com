@@ -8,19 +8,19 @@ import {
   EditOutlined,
   DeleteOutlined,
 } from '@ant-design/icons'
-import { useQuery, useQueryCache } from 'react-query'
+import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
 
 import AppLayout from 'components/AppLayout'
 import CustomerModal from 'components/CustomerModal'
 import customerService from 'services/customers'
+import queryCache from 'utils/queryCache'
 
 export default function CustomerPage() {
   const [showCustomerModal, setShowCustomerModal] = useState(false)
   const [modalType, setModalType] = useState('CREATE_CUSTOMER_MODAL')
   const [selectedCustomer, setSelectedCustomer] = useState({})
 
-  const cache = useQueryCache()
   const router = useRouter()
 
   const { data, isLoading } = useQuery(['/customers'], () =>
@@ -30,7 +30,7 @@ export default function CustomerPage() {
   const handleDeleteCustomer = async (customerID) => {
     await customerService.delete(customerID)
     message.success('customer has been successfully deleted.')
-    cache.invalidateQueries(['/customers'])
+    queryCache.invalidateQueries(['/customers'])
   }
 
   const columns = [

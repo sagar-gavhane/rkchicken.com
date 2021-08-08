@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Form, Input, message } from 'antd'
-import { useQueryCache } from 'react-query'
 
 import validationRules from 'config/validationRules'
 import companyService from 'services/company'
+import queryCache from 'utils/queryCache'
 
 const CompanyModal = (props) => {
   const [form] = Form.useForm()
   const [isSubmitting, setIsSubmitting] = useState(false)
-
-  const cache = useQueryCache()
 
   const defaultFormValues = {
     name: '',
@@ -54,7 +52,7 @@ const CompanyModal = (props) => {
               message.success('Company has been created successfully.')
             }
 
-            cache.invalidateQueries(['/companies'])
+            queryCache.invalidateQueries(['/companies'])
             form.resetFields()
             props.onCancel()
           })

@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from 'react'
 import Head from 'next/head'
-import { QueryCache, ReactQueryCacheProvider } from 'react-query'
-import { ReactQueryDevtools } from 'react-query-devtools'
+import { QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
 import { useRouter } from 'next/router'
 import * as gtag from 'utils/gtag'
 import 'antd/dist/antd.css'
@@ -10,14 +10,7 @@ import 'styles/global.css'
 
 import AuthContext, { authInitialState } from 'context/AuthContext'
 import useLocalStorage from 'hooks/useLocalStorage'
-
-const queryCache = new QueryCache({
-  defaultConfig: {
-    queries: {
-      staleTime: 5 * 60 * 1000,
-    },
-  },
-})
+import queryCache from 'utils/queryCache'
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter()
@@ -39,10 +32,10 @@ function MyApp({ Component, pageProps }) {
         <title>RKChicken</title>
       </Head>
       <AuthContext.Provider value={[user, setUser]}>
-        <ReactQueryCacheProvider queryCache={queryCache}>
-          <ReactQueryDevtools />
+        <QueryClientProvider client={queryCache}>
+          <ReactQueryDevtools initialIsOpen={false} />
           <Component {...pageProps} />
-        </ReactQueryCacheProvider>
+        </QueryClientProvider>
       </AuthContext.Provider>
     </Fragment>
   )

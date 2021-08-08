@@ -8,12 +8,13 @@ import {
   EditOutlined,
   DeleteOutlined,
 } from '@ant-design/icons'
-import { useQuery, useQueryCache } from 'react-query'
+import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
 
 import AppLayout from 'components/AppLayout'
 import CompanyModal from 'components/CompanyModal'
 import companyService from 'services/company'
+import queryCache from 'utils/queryCache'
 
 export default function CompanyPage() {
   const [showCompanyModal, setShowCompanyModal] = useState(false)
@@ -21,7 +22,6 @@ export default function CompanyPage() {
   const [selectedCompany, setSelectedCompany] = useState({})
 
   const router = useRouter()
-  const cache = useQueryCache()
 
   const { data: companies, isLoading } = useQuery(['/companies'], () => {
     return companyService.get()
@@ -30,7 +30,7 @@ export default function CompanyPage() {
   const handleDeleteCompany = async (companyId) => {
     await companyService.delete(companyId)
     message.success('Compnay has been successfully deleted.')
-    cache.invalidateQueries(['/companies'])
+    queryCache.invalidateQueries(['/companies'])
   }
 
   const columns = [

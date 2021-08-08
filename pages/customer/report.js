@@ -48,6 +48,7 @@ export default function CustomerReportPage() {
   const { data: customers } = useQuery(['/customers'], () =>
     customerService.get()
   )
+  console.log('-->', form.getFieldValue('customerId'))
   const {
     data: invoices,
     isLoading,
@@ -61,9 +62,13 @@ export default function CustomerReportPage() {
         pagination,
       },
     ],
-    (_, { customerId, dateRange, pagination }) => {
+    () => {
+      const customerId = form.getFieldValue('customerId')
+      const dateRange = form.getFieldValue('dateRange')
+
       const limit = pagination.pageSize
       const offset = getOffset(pagination)
+      console.log('[limit]', limit)
 
       if (customerId && dateRange?.length > 0) {
         const [from, to] = dateRange

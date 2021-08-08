@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Form, Input, message } from 'antd'
-import { useQueryCache } from 'react-query'
 
 import validationRules from 'config/validationRules'
 import customerService from 'services/customers'
+import queryCache from 'utils/queryCache'
 
 const CustomerModal = (props) => {
   const [form] = Form.useForm()
   const [isSubmitting, setIsSubmitting] = useState(false)
-
-  const cache = useQueryCache()
 
   const defaultFormValues = {
     name: '',
@@ -55,7 +53,7 @@ const CustomerModal = (props) => {
               message.success('Customer has been created successfully.')
             }
 
-            cache.invalidateQueries(['/customers'])
+            queryCache.invalidateQueries(['/customers'])
             form.resetFields()
             props.onCancel()
           })
