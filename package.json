@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@auth0/nextjs-auth0": "^1.5.0",
     "antd": "^4.16.10",
     "axios": "^0.21.1",
     "cogo-toast": "^4.2.3",
