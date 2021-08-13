@@ -10,6 +10,7 @@ import {
 } from '@ant-design/icons'
 import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
+import { withPageAuthRequired } from '@auth0/nextjs-auth0'
 
 import AppLayout from 'components/AppLayout'
 import CustomerModal from 'components/CustomerModal'
@@ -148,3 +149,5 @@ export default function CustomerPage() {
     </AppLayout>
   )
 }
+
+export const getServerSideProps = withPageAuthRequired()

@@ -12,6 +12,7 @@ import {
 import qs from 'query-string'
 import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
+import { withPageAuthRequired } from '@auth0/nextjs-auth0'
 
 import AppLayout from 'components/AppLayout'
 import salesService from 'services/sales'
@@ -170,3 +171,5 @@ export default function SalesPage() {
     </AppLayout>
   )
 }
+
+export const getServerSideProps = withPageAuthRequired()

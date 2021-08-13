@@ -3,6 +3,7 @@ import Error from 'next/error'
 import { Spin } from 'antd'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
+import { withPageAuthRequired } from '@auth0/nextjs-auth0'
 
 import SalesInvoiceForm from 'components/SalesInvoiceForm'
 import salesService from 'services/sales'
@@ -39,3 +40,5 @@ export default function SalesInvoiceUpdatePage() {
 
   return <SalesInvoiceForm actionType='EDIT_INVOICE' invoice={data} />
 }
+
+export const getServerSideProps = withPageAuthRequired()

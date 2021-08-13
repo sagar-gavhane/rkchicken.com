@@ -19,6 +19,7 @@ import {
 import { EyeOutlined, ExportOutlined } from '@ant-design/icons'
 import { useQuery } from 'react-query'
 import qs from 'query-string'
+import { withPageAuthRequired } from '@auth0/nextjs-auth0'
 
 import AppLayout from 'components/AppLayout'
 import salesService from 'services/sales'
@@ -307,3 +308,5 @@ export default function CustomerReportPage() {
     </AppLayout>
   )
 }
+
+export const getServerSideProps = withPageAuthRequired()

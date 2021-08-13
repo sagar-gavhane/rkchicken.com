@@ -8,13 +8,10 @@ import 'antd/dist/antd.css'
 import 'nprogress/nprogress.css'
 import 'styles/global.css'
 
-import AuthContext, { authInitialState } from 'context/AuthContext'
-import useLocalStorage from 'hooks/useLocalStorage'
 import queryCache from 'utils/queryCache'
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter()
-  const [user, setUser] = useLocalStorage('auth', authInitialState)
 
   useEffect(() => {
     const handleRouteChange = (url) => {
@@ -31,12 +28,10 @@ function MyApp({ Component, pageProps }) {
       <Head>
         <title>RKChicken</title>
       </Head>
-      <AuthContext.Provider value={[user, setUser]}>
-        <QueryClientProvider client={queryCache}>
-          <ReactQueryDevtools initialIsOpen={false} />
-          <Component {...pageProps} />
-        </QueryClientProvider>
-      </AuthContext.Provider>
+      <QueryClientProvider client={queryCache}>
+        <ReactQueryDevtools initialIsOpen={false} />
+        <Component {...pageProps} />
+      </QueryClientProvider>
     </Fragment>
   )
 }

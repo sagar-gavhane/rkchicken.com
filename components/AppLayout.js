@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
 import { Layout, Menu } from 'antd'
@@ -12,12 +12,10 @@ import {
 import { useRouter } from 'next/router'
 
 import Clock from 'components/Clock'
-import AuthContext from 'context/AuthContext'
 
 const { Header, Content, Footer, Sider } = Layout
 
 export default function AppLayout(props) {
-  const [user] = useContext(AuthContext)
   const router = useRouter()
 
   const selectedKeys = {
@@ -32,8 +30,6 @@ export default function AppLayout(props) {
     '/purchase/invoice/update/[invoiceId]': '4',
     '/purchase': '4',
   }
-
-  if (!user?.signedIn && typeof window !== 'undefined') router.push('/logout')
 
   return (
     <Layout id='components-layout-demo-responsive'>
@@ -71,7 +67,7 @@ export default function AppLayout(props) {
       <Layout>
         <Header className='site-layout-header'>
           <Clock />
-          <Link href='/logout'>
+          <Link href='/api/auth/logout'>
             <a className='logout-outlined-wrapper'>
               <LogoutOutlined style={{ color: 'ButtonText' }} />
             </a>

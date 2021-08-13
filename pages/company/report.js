@@ -14,6 +14,7 @@ import {
   Table,
   Form,
 } from 'antd'
+import { withPageAuthRequired } from '@auth0/nextjs-auth0'
 
 import AppLayout from 'components/AppLayout'
 import companyService from 'services/company'
@@ -26,7 +27,11 @@ export default function CompanyReportPage() {
     return companyService.get()
   })
 
-  const { data: invoices, isLoading, refetch } = useQuery(
+  const {
+    data: invoices,
+    isLoading,
+    refetch,
+  } = useQuery(
     [
       '/purchases/invoices',
       {
@@ -162,3 +167,5 @@ export default function CompanyReportPage() {
     </AppLayout>
   )
 }
+
+export const getServerSideProps = withPageAuthRequired()

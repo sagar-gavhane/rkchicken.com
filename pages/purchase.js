@@ -6,6 +6,7 @@ import { Table, Space, Typography, Popconfirm, Button, message } from 'antd'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
+import { withPageAuthRequired } from '@auth0/nextjs-auth0'
 
 import AppLayout from 'components/AppLayout'
 import purchaseService from 'services/purchases'
@@ -122,3 +123,5 @@ export default function PurchasePage() {
     </AppLayout>
   )
 }
+
+export const getServerSideProps = withPageAuthRequired()

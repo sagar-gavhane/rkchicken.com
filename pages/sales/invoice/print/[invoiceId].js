@@ -3,6 +3,7 @@ import moment from 'moment'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import { Col, Row, Space, Typography, Descriptions, Spin } from 'antd'
+import { withPageAuthRequired } from '@auth0/nextjs-auth0'
 
 import salesService from 'services/sales'
 
@@ -113,3 +114,5 @@ const InvoicePrintPage = () => {
 }
 
 export default InvoicePrintPage
+
+export const getServerSideProps = withPageAuthRequired()
