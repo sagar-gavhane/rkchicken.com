@@ -21,7 +21,7 @@
     "lodash.round": "^4.0.4",
     "lodash.size": "^4.2.0",
     "lodash.sumby": "^4.6.0",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "mongoose": "^5.11.7",
     "mongoose-auto-increment": "^5.0.1",
     "next": "^10.0.3",
