@@ -16,6 +16,8 @@ import AuthContext from 'context/AuthContext'
 
 const { Header, Content, Footer, Sider } = Layout
 
+const year = new Date().getFullYear()
+
 export default function AppLayout(props) {
   const [user] = useContext(AuthContext)
   const router = useRouter()
@@ -81,7 +83,7 @@ export default function AppLayout(props) {
           <div className='site-layout'>{props.children}</div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
-          RKChicken ©2020 Created by Atul Software
+          RKChicken ©{year} Created by Atul Software
         </Footer>
       </Layout>
     </Layout>
