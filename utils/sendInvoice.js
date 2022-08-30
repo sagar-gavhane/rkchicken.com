@@ -6,7 +6,7 @@ export function sendInvoice(customer, invoice) {
   const mobile = [customer.mobileNumber]
 
   const message = [
-    `Rktrds`,
+    `Rktraders`,
     `Invoice no: ${invoice.invoiceId}`,
     `Date: ${format(new Date(invoice.invoiceDate), 'dd/MM/yyyy')}`,
     `Chicken Rate: ${invoice.chickenRate}`,
