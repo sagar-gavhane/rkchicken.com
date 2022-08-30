@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 let cachedDb = null
 
-export async function connectToDatabase(uri) {
+export async function connectToDatabase() {
   if (cachedDb) return cachedDb
 
   if (!process.env.MONGODB_URI) throw new Error('MONGODB_URI is missing...')
