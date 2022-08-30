@@ -1,14 +1,14 @@
 import Axios from 'utils/axiosInstance'
 
 class Customer {
-  get() {
-    return Axios.get('/customers').then((response) => response.data.data)
+  async get() {
+    const response = await Axios.get('/customers')
+    return response.data.data
   }
 
-  create(payload) {
-    return Axios.post('/customers', payload).then(
-      (response) => response.data.data
-    )
+  async create(payload) {
+    const response = await Axios.post('/customers', payload)
+    return response.data.data
   }
 
   update(customerID, payload) {
