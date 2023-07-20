@@ -1,9 +1,7 @@
-import React, { Fragment, useEffect } from 'react'
+import React, { Fragment } from 'react'
 import Head from 'next/head'
 import { QueryCache, ReactQueryCacheProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query-devtools'
-import { useRouter } from 'next/router'
-import * as gtag from 'utils/gtag'
 import 'antd/dist/antd.css'
 import 'nprogress/nprogress.css'
 import 'styles/global.css'
@@ -20,18 +18,7 @@ const queryCache = new QueryCache({
 })
 
 function MyApp({ Component, pageProps }) {
-  const router = useRouter()
   const [user, setUser] = useLocalStorage('auth', authInitialState)
-
-  useEffect(() => {
-    const handleRouteChange = (url) => {
-      gtag.pageview(url)
-    }
-    router.events.on('routeChangeComplete', handleRouteChange)
-    return () => {
-      router.events.off('routeChangeComplete', handleRouteChange)
-    }
-  }, [router.events])
 
   return (
     <Fragment>
