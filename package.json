@@ -22,7 +22,7 @@
     "lodash.size": "^4.2.0",
     "lodash.sumby": "^4.6.0",
     "moment": "^2.29.1",
-    "mongoose": "^5.11.7",
+    "mongoose": "^6.11.4",
     "mongoose-auto-increment": "^5.0.1",
     "next": "^10.0.3",
     "node-fetch": "^2.6.1",

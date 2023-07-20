@@ -8,10 +8,6 @@ export async function connectToDatabase() {
   if (!process.env.MONGODB_URI) throw new Error('MONGODB_URI is missing...')
 
   const db = await mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
     autoIndex: true,
   })
 
