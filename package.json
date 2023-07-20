@@ -10,7 +10,7 @@
   "dependencies": {
     "@sentry/nextjs": "^7.59.3",
     "antd": "^4.9.3",
-    "axios": "^0.21.0",
+    "axios": "^0.21.2",
     "cogo-toast": "^4.2.3",
     "date-fns": "^2.16.1",
     "eslint": "^7.15.0",
