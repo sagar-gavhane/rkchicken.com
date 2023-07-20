@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@sentry/nextjs": "^7.59.3",
     "antd": "^4.9.3",
     "axios": "^0.21.0",
     "cogo-toast": "^4.2.3",
