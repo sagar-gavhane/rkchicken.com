@@ -131,7 +131,7 @@ function PurchaseInvoiceForm(props) {
     <AppLayout>
       <Breadcrumb style={{ margin: '1rem 0' }}>
         <Breadcrumb.Item>
-          <Link href='/purchase'>
+          <Link href='/purchase' legacyBehavior>
             <Typography.Link>Purchase</Typography.Link>
           </Link>
         </Breadcrumb.Item>

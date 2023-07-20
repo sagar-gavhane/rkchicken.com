@@ -194,7 +194,7 @@ export default function CustomerReportPage() {
       key: 'action',
       render: (_, record) => (
         <Space size='middle'>
-          <Link href={`/sales/invoice/print/${record._id}`}>
+          <Link href={`/sales/invoice/print/${record._id}`} legacyBehavior>
             <Typography.Link>
               <EyeOutlined />
             </Typography.Link>

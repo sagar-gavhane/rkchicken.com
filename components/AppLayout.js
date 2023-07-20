@@ -10,9 +10,11 @@ import {
   LogoutOutlined,
 } from '@ant-design/icons'
 import { useRouter } from 'next/router'
+import dynamic from 'next/dynamic'
 
-import Clock from 'components/Clock'
 import AuthContext from 'context/AuthContext'
+
+const Clock = dynamic(() => import('components/Clock'), { ssr: false })
 
 const { Header, Content, Footer, Sider } = Layout
 
@@ -40,8 +42,8 @@ export default function AppLayout(props) {
   return (
     <Layout id='components-layout-demo-responsive'>
       <Sider defaultCollapsed={true}>
-        <Link href='/customer'>
-          <a className='logo'>RK</a>
+        <Link href='/customer' className='logo'>
+          RK
         </Link>
         <Menu
           theme='dark'
@@ -49,34 +51,24 @@ export default function AppLayout(props) {
           defaultSelectedKeys={[selectedKeys[router.pathname]]}
         >
           <Menu.Item key='1' icon={<UserOutlined />}>
-            <Link href='/customer'>
-              <a>Customer</a>
-            </Link>
+            <Link href='/customer'>Customer</Link>
           </Menu.Item>
           <Menu.Item key='2' icon={<BankOutlined />}>
-            <Link href='/company'>
-              <a>Company</a>
-            </Link>
+            <Link href='/company'>Company</Link>
           </Menu.Item>
           <Menu.Item key='3' icon={<DollarOutlined />}>
-            <Link href='/sales'>
-              <a>Sales</a>
-            </Link>
+            <Link href='/sales'>Sales</Link>
           </Menu.Item>
           <Menu.Item key='4' icon={<ScanOutlined />}>
-            <Link href='/purchase'>
-              <a>Purchase</a>
-            </Link>
+            <Link href='/purchase'>Purchase</Link>
           </Menu.Item>
         </Menu>
       </Sider>
       <Layout>
         <Header className='site-layout-header'>
           <Clock />
-          <Link href='/logout'>
-            <a className='logout-outlined-wrapper'>
-              <LogoutOutlined style={{ color: 'ButtonText' }} />
-            </a>
+          <Link href='/logout' className='logout-outlined-wrapper'>
+            <LogoutOutlined style={{ color: 'ButtonText' }} />
           </Link>
         </Header>
         <Content style={{ margin: '1.5rem 1.5rem 0' }}>
