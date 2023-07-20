@@ -163,7 +163,7 @@ function SalesInvoiceForm(props) {
     <AppLayout>
       <Breadcrumb style={{ margin: '1rem 0' }}>
         <Breadcrumb.Item>
-          <Link href='/sales'>
+          <Link href='/sales' legacyBehavior>
             <Typography.Link>Sales</Typography.Link>
           </Link>
         </Breadcrumb.Item>

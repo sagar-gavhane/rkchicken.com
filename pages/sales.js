@@ -120,14 +120,10 @@ export default function SalesPage() {
       render: (_, record) => (
         <Space size='middle'>
           <Link href={`/sales/invoice/print/${record._id}`}>
-            <a>
-              <EyeOutlined />
-            </a>
+            <EyeOutlined />
           </Link>
           <Link href={`/sales/invoice/update/${record._id}`}>
-            <a>
-              <EditOutlined />
-            </a>
+            <EditOutlined />
           </Link>
           <Popconfirm
             title='Are you sure to delete this invoice?'

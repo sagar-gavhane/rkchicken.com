@@ -26,7 +26,11 @@ export default function CompanyReportPage() {
     return companyService.get()
   })
 
-  const { data: invoices, isLoading, refetch } = useQuery(
+  const {
+    data: invoices,
+    isLoading,
+    refetch,
+  } = useQuery(
     [
       '/purchases/invoices',
       {
@@ -97,9 +101,7 @@ export default function CompanyReportPage() {
       <Space direction='vertical'>
         <Breadcrumb>
           <Breadcrumb.Item>
-            <Link href='/company'>
-              <a>Company</a>
-            </Link>
+            <Link href='/company'>Company</Link>
           </Breadcrumb.Item>
           <Breadcrumb.Item>Report</Breadcrumb.Item>
         </Breadcrumb>

@@ -32,3 +32,10 @@ yarn-error.log*
 
 # vercel
 .vercel
+.env
+
+# Sentry Auth Token
+.sentryclirc
+
+# backup
+dump/

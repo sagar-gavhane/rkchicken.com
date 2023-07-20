@@ -1,5 +1,6 @@
 import fetch from 'node-fetch'
 import queryString from 'query-string'
+import * as Sentry from '@sentry/nextjs'
 
 export async function sendMessage({ message, mobile }) {
   const user = process.env.BULK_SMS_GATEWAY_USER
@@ -26,8 +27,10 @@ export async function sendMessage({ message, mobile }) {
 
   try {
     const response = await fetch(url).then((response) => response.json())
+    Sentry.captureMessage(JSON.stringify(response), { level: 'info' })
     console.log('[response]', response)
   } catch (err) {
-    console.log('[err]', err)
+    console.error(err)
+    Sentry.captureException(err, { level: 'fatal' })
   }
 }
