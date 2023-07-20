@@ -2,10 +2,10 @@
 // The config you add here will be used whenever a users loads a page in their browser.
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
-import * as Sentry from "@sentry/nextjs";
+import * as Sentry from '@sentry/nextjs'
 
 Sentry.init({
-  dsn: "https://f7b9ae8c13e846ab8fe4ba013392a291@o4505475304849408.ingest.sentry.io/4505475328442368",
+  dsn: 'https://f7b9ae8c13e846ab8fe4ba013392a291@o4505475304849408.ingest.sentry.io/4505475328442368',
 
   // Adjust this value in production, or use tracesSampler for greater control
   tracesSampleRate: 1,
@@ -27,4 +27,6 @@ Sentry.init({
       blockAllMedia: true,
     }),
   ],
-});
+
+  ignoreErrors: ['ResizeObserver loop limit exceeded'],
+})
