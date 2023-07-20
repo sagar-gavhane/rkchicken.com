@@ -27,10 +27,9 @@ export async function sendMessage({ message, mobile }) {
 
   try {
     const response = await fetch(url).then((response) => response.json())
-    Sentry.captureMessage(JSON.stringify(response), { level: 'info' })
     console.log('[response]', response)
   } catch (err) {
     console.error(err)
-    Sentry.captureException(err, { level: 'fatal' })
+    Sentry.captureException(err, { level: 'error' })
   }
 }
