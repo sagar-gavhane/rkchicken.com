@@ -48,6 +48,10 @@ export default async function handler(req, res) {
           invoiceProjection,
         ])
 
+        redis.set(`invoice:${req.query.invoiceId}`, JSON.stringify(invoice), {
+          ex: 2 * 60,
+        })
+
         res.status(httpStatusCodes.OK).send({
           data: invoice,
           message: 'Invoice has been successfully retrieved.',
