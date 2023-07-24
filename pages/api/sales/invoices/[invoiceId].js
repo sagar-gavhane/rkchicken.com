@@ -36,7 +36,7 @@ export default async function handler(req, res) {
 
         if (cached) {
           res.status(httpStatusCodes.OK).send({
-            data: invoice,
+            data: cached,
             message: 'Invoice has been successfully retrieved.',
           })
           return
