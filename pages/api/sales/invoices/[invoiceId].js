@@ -9,6 +9,7 @@ import { customer as customerLookup } from 'aggregation-pipelines/lookups'
 import { connectToDatabase } from 'utils/connectToDatabase'
 import { handleError } from 'utils/handleError'
 import { sendInvoice } from 'utils/sendInvoice'
+import redis from 'utils/redis'
 
 export default async function handler(req, res) {
   try {
@@ -31,6 +32,16 @@ export default async function handler(req, res) {
   switch (req.method) {
     case 'GET': {
       try {
+        const cached = await redis.get(`invoice:${req.query.invoiceId}`)
+
+        if (cached) {
+          res.status(httpStatusCodes.OK).send({
+            data: invoice,
+            message: 'Invoice has been successfully retrieved.',
+          })
+          return
+        }
+
         const [invoice] = await InvoiceModel.aggregate([
           { $match: { _id: Types.ObjectId(req.query.invoiceId) } },
           customerLookup,
@@ -67,6 +78,17 @@ export default async function handler(req, res) {
           }
         )
 
+        await Promise.allSettled([
+          redis.set(`invoice:${req.query.invoiceId}`, JSON.stringify(invoice), {
+            ex: 2 * 60,
+          }),
+          redis.set(
+            `customer:${req.query.customerId}`,
+            JSON.stringify(customer),
+            { ex: 2 * 60 }
+          ),
+        ])
+
         sendInvoice(customer, invoice)
 
         res.status(httpStatusCodes.OK).send({
@@ -83,6 +105,8 @@ export default async function handler(req, res) {
     case 'DELETE': {
       try {
         await InvoiceModel.findByIdAndRemove(req.query.invoiceId)
+
+        await redis.del(`invoice:${req.query.invoiceId}`)
 
         res.status(httpStatusCodes.NO_CONTENT).send({})
       } catch (err) {
