@@ -3,6 +3,7 @@ import httpStatusCodes from 'http-status-codes'
 import CustomerModel from 'models/Customer'
 import { connectToDatabase } from 'utils/connectToDatabase'
 import { handleError } from 'utils/handleError'
+import redis from 'utils/redis'
 
 export default async function handler(req, res) {
   await connectToDatabase()
@@ -10,7 +11,21 @@ export default async function handler(req, res) {
   switch (req.method) {
     case 'GET': {
       try {
+        const cached = await redis.get('customers:all')
+
+        if (cached) {
+          res.status(httpStatusCodes.OK).send({
+            message: 'Customers record successfully retrieved.',
+            data: cached,
+          })
+          return
+        }
+
         const customers = await CustomerModel.find()
+
+        await redis.set('customer:all', JSON.stringify(customers), {
+          ex: 2 * 60,
+        })
 
         res.status(httpStatusCodes.OK).send({
           message: 'Customers record successfully retrieved.',
@@ -26,6 +41,10 @@ export default async function handler(req, res) {
     case 'POST': {
       try {
         const customer = await new CustomerModel(req.body).save()
+
+        await redis.set(`customer:${customer._id}`, JSON.stringify(customer), {
+          ex: 2 * 60,
+        })
 
         res.status(httpStatusCodes.CREATED).send({
           message: 'Customer has been created successfully.',

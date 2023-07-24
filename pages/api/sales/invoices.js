@@ -11,6 +11,7 @@ import { sendInvoice } from 'utils/sendInvoice'
 import { customer as customerLookup } from 'aggregation-pipelines/lookups'
 import { invoice as invoiceProjection } from 'aggregation-pipelines/projections'
 import { invoiceFilter } from 'aggregation-pipelines/matches'
+import redis from 'utils/redis'
 
 export default async function handler(req, res) {
   await connectToDatabase()
@@ -73,6 +74,15 @@ export default async function handler(req, res) {
         )
 
         sendInvoice(customer, invoice)
+
+        await Promise.allSettled([
+          redis.set(`invoice:${invoice._id}`, JSON.stringify(invoice), {
+            ex: 2 * 60,
+          }),
+          redis.set(`customer:${customer._id}`, JSON.stringify(customer), {
+            ex: 2 * 60,
+          }),
+        ])
 
         res.status(httpStatusCodes.OK).send({
           data: invoice,

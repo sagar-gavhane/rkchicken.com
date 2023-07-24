@@ -5,6 +5,7 @@ import CustomerModel from 'models/Customer'
 import customerError from 'errors/customer'
 import { connectToDatabase } from 'utils/connectToDatabase'
 import { handleError } from 'utils/handleError'
+import redis from 'utils/redis'
 
 export default async function handler(req, res) {
   try {
@@ -29,7 +30,23 @@ export default async function handler(req, res) {
   switch (req.method) {
     case 'GET': {
       try {
+        const cached = await redis.get(`customer:${req.query.customerId}`)
+
+        if (cached) {
+          res.status(httpStatusCodes.OK).send({
+            message: 'Customer record has been retrieved successfully.',
+            data: cached,
+          })
+          return
+        }
+
         const customer = await CustomerModel.findById(req.query.customerId)
+
+        await redis.set(
+          `customer:${req.query.customerId}`,
+          JSON.stringify(customer),
+          { ex: 2 * 60 }
+        )
 
         res.status(httpStatusCodes.OK).send({
           message: 'Customer record has been retrieved successfully.',
@@ -54,6 +71,12 @@ export default async function handler(req, res) {
           }
         )
 
+        await redis.set(
+          `customer:${req.query.customerId}`,
+          JSON.stringify(customer),
+          { ex: 2 * 60 }
+        )
+
         res.status(httpStatusCodes.OK).send({
           message: 'Customer record has been updated successfully.',
           data: customer,
@@ -68,6 +91,8 @@ export default async function handler(req, res) {
     case 'DELETE': {
       try {
         await CustomerModel.findByIdAndRemove(req.query.customerId)
+
+        await redis.del(`customer:${req.query.customerId}`)
 
         res.status(httpStatusCodes.NO_CONTENT).send({
           message: 'Customer record has been deleted successfully.',
