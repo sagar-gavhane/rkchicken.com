@@ -23,7 +23,9 @@ export default async function handler(req, res) {
 
         const customers = await CustomerModel.find()
 
-        await redis.set('customer:all', JSON.stringify(customers), { ex: 60 })
+        await redis.set('customer:all', JSON.stringify(customers), {
+          ex: 2 * 60,
+        })
 
         res.status(httpStatusCodes.OK).send({
           message: 'Customers record successfully retrieved.',
