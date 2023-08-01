@@ -13,6 +13,7 @@ export default async function handler(req, res) {
       const cached = await redis.get(`customer:${req.query.customerId}`)
 
       if (cached) {
+        res.setHeader('Cache-Control', 'public, max-age=60, must-revalidate')
         res.status(httpStatusCodes.OK).send({
           message: 'Customer record has been retrieved successfully.',
           data: cached,
