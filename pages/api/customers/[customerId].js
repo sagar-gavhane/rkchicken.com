@@ -30,7 +30,9 @@ export default async function handler(req, res) {
   switch (req.method) {
     case 'GET': {
       try {
+        console.time('redis.get customer:id')
         const cached = await redis.get(`customer:${req.query.customerId}`)
+        console.timeEnd('redis.get customer:id')
 
         if (cached) {
           res.status(httpStatusCodes.OK).send({
@@ -40,13 +42,17 @@ export default async function handler(req, res) {
           return
         }
 
+        console.time('findById')
         const customer = await CustomerModel.findById(req.query.customerId)
+        console.timeEnd('findById')
 
+        console.time('redis.set customer:id')
         await redis.set(
           `customer:${req.query.customerId}`,
           JSON.stringify(customer),
           { ex: 2 * 60 }
         )
+        console.timeEnd('redis.set customer:id')
 
         res.status(httpStatusCodes.OK).send({
           message: 'Customer record has been retrieved successfully.',
