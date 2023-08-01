@@ -14,10 +14,14 @@ export default async function handler(req, res) {
       throw customerError.INVALID_CUSTOMER_ID(req.query.customerId)
     }
 
+    console.time('connectToDatabase')
     await connectToDatabase()
+    console.timeEnd('connectToDatabase')
 
     // early catch customer is exist or not database
+    console.time('exists')
     const customer = await CustomerModel.exists({ _id: req.query.customerId })
+    console.timeEnd('exists')
 
     if (!customer) {
       throw customerError.CUSTOMER_NOT_FOUND(req.query.customerId)
