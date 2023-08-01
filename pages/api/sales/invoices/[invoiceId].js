@@ -95,14 +95,8 @@ export default async function handler(req, res) {
         )
 
         await Promise.allSettled([
-          redis.set(`invoice:${req.query.invoiceId}`, JSON.stringify(invoice), {
-            ex: 2 * 60,
-          }),
-          redis.set(
-            `customer:${req.query.customerId}`,
-            JSON.stringify(customer),
-            { ex: 2 * 60 }
-          ),
+          redis.del(`invoice:${req.query.invoiceId}`),
+          redis.del(`customer:${req.query.customerId}`),
         ])
 
         sendInvoice(customer, invoice)

@@ -52,9 +52,7 @@ export default async function handler(req, res) {
       try {
         const customer = await new CustomerModel(req.body).save()
 
-        await redis.set(`customer:${customer._id}`, JSON.stringify(customer), {
-          ex: 2 * 60,
-        })
+        await redis.del(`customer:${customer._id}`)
 
         res.status(httpStatusCodes.CREATED).json({
           message: 'Customer has been created successfully.',

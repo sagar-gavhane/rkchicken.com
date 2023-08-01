@@ -81,11 +81,7 @@ export default async function handler(req, res) {
           }
         )
 
-        await redis.set(
-          `customer:${req.query.customerId}`,
-          JSON.stringify(customer),
-          { ex: 2 * 60 }
-        )
+        await redis.del(`customer:${req.query.customerId}`)
 
         res.status(httpStatusCodes.OK).json({
           message: 'Customer record has been updated successfully.',
