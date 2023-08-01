@@ -9,6 +9,18 @@ import redis from 'utils/redis'
 
 export default async function handler(req, res) {
   try {
+    if (req.method === 'GET') {
+      const cached = await redis.get(`customer:${req.query.customerId}`)
+
+      if (cached) {
+        res.status(httpStatusCodes.OK).send({
+          message: 'Customer record has been retrieved successfully.',
+          data: cached,
+        })
+        return
+      }
+    }
+
     // early catch invalid customer ids
     if (!Types.ObjectId.isValid(req.query.customerId)) {
       throw customerError.INVALID_CUSTOMER_ID(req.query.customerId)
@@ -34,17 +46,17 @@ export default async function handler(req, res) {
   switch (req.method) {
     case 'GET': {
       try {
-        console.time('redis.get customer:id')
-        const cached = await redis.get(`customer:${req.query.customerId}`)
-        console.timeEnd('redis.get customer:id')
+        // console.time('redis.get customer:id')
+        // const cached = await redis.get(`customer:${req.query.customerId}`)
+        // console.timeEnd('redis.get customer:id')
 
-        if (cached) {
-          res.status(httpStatusCodes.OK).send({
-            message: 'Customer record has been retrieved successfully.',
-            data: cached,
-          })
-          return
-        }
+        // if (cached) {
+        //   res.status(httpStatusCodes.OK).send({
+        //     message: 'Customer record has been retrieved successfully.',
+        //     data: cached,
+        //   })
+        //   return
+        // }
 
         console.time('findById')
         const customer = await CustomerModel.findById(req.query.customerId)
