@@ -24,7 +24,7 @@ export default async function handler(req, res) {
 
         const invoices = await PurchaseInvoiceModel.aggregate(pipeline)
 
-        res.status(httpStatusCodes.OK).send({
+        res.status(httpStatusCodes.OK).json({
           data: invoices,
           message: 'Purchase invoices has been successfully retrieved.',
         })
@@ -57,7 +57,7 @@ export default async function handler(req, res) {
           })
         }
 
-        res.status(httpStatusCodes.OK).send({
+        res.status(httpStatusCodes.OK).json({
           data: purchaseInvoice,
           message: 'Purchase invoice has been successfully created.',
         })

@@ -18,7 +18,7 @@ export default async function handler(req, res) {
           throw userError.AUTH_MISMATCHED()
         }
 
-        res.status(httpStatusCodes.OK).send({
+        res.status(httpStatusCodes.OK).json({
           message: 'User has been successfully logged in.',
           data: {},
         })

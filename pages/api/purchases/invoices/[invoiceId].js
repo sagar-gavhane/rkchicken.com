@@ -38,7 +38,7 @@ export default async function handler(req, res) {
           purchaseInvoiceProjection,
         ])
 
-        res.status(httpStatusCodes.OK).send({
+        res.status(httpStatusCodes.OK).json({
           data: invoice,
           message: 'Invoice has been successfully retrieved.',
         })
@@ -63,7 +63,7 @@ export default async function handler(req, res) {
           })
         }
 
-        res.status(httpStatusCodes.OK).send({
+        res.status(httpStatusCodes.OK).json({
           data: invoice,
           message: 'Invoice has been successfully updated.',
         })
@@ -78,7 +78,7 @@ export default async function handler(req, res) {
       try {
         await PurchaseInvoiceModel.findByIdAndRemove(req.query.invoiceId)
 
-        res.status(httpStatusCodes.NO_CONTENT).send({})
+        res.status(httpStatusCodes.NO_CONTENT).json({})
       } catch (err) {
         handleError(res, err)
       }
