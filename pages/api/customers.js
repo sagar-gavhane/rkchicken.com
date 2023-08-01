@@ -12,7 +12,7 @@ export default async function handler(req, res) {
     if (cached) {
       res.setHeader(
         'Cache-Control',
-        'public, max-age=60, s-maxage=60, stale-while-revalidate=30'
+        'public, max-age=60, s-maxage=60, stale-while-revalidate'
       )
       res.status(httpStatusCodes.OK).json({
         message: 'Customers record successfully retrieved.',
@@ -35,7 +35,7 @@ export default async function handler(req, res) {
 
         res.setHeader(
           'Cache-Control',
-          'public, max-age=60, s-maxage=60, stale-while-revalidate=30'
+          'public, max-age=60, s-maxage=60, stale-while-revalidate'
         )
         res.status(httpStatusCodes.OK).json({
           message: 'Customers record successfully retrieved.',
