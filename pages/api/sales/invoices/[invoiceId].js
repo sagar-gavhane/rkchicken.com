@@ -10,7 +10,6 @@ import { connectToDatabase } from 'utils/connectToDatabase'
 import { handleError } from 'utils/handleError'
 import { sendInvoice } from 'utils/sendInvoice'
 import redis from 'utils/redis'
-import generateETag from 'utils/generateETag'
 
 export default async function handler(req, res) {
   try {
@@ -18,10 +17,6 @@ export default async function handler(req, res) {
       const cached = await redis.get(`invoice:${req.query.invoiceId}`)
 
       if (cached) {
-        res.setHeader(
-          'Cache-Control',
-          'public, max-age=60, s-maxage=60, stale-while-revalidate'
-        )
         res.status(httpStatusCodes.OK).json({
           data: cached,
           message: 'Invoice has been successfully retrieved.',
@@ -61,10 +56,6 @@ export default async function handler(req, res) {
           { ex: 2 * 60 }
         )
 
-        res.setHeader(
-          'Cache-Control',
-          'public, max-age=60, s-maxage=60, stale-while-revalidate'
-        )
         res.status(httpStatusCodes.OK).json({
           data: invoice,
           message: 'Invoice has been successfully retrieved.',
@@ -102,7 +93,6 @@ export default async function handler(req, res) {
 
         sendInvoice(customer, invoice)
 
-        res.setHeader('Etag', generateETag())
         res.status(httpStatusCodes.OK).json({
           data: invoice,
           message: 'Invoice has been successfully updated.',
