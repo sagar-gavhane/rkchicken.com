@@ -6,28 +6,38 @@ import { handleError } from 'utils/handleError'
 import redis from 'utils/redis'
 
 export default async function handler(req, res) {
+  if (req.method === 'GET') {
+    const cached = await redis.get('customers:all')
+
+    if (cached) {
+      res.setHeader(
+        'Cache-Control',
+        'public, max-age=60, s-maxage=60, stale-while-revalidate'
+      )
+      res.status(httpStatusCodes.OK).json({
+        message: 'Customers record successfully retrieved.',
+        data: cached,
+      })
+      return
+    }
+  }
+
   await connectToDatabase()
 
   switch (req.method) {
     case 'GET': {
       try {
-        const cached = await redis.get('customers:all')
-
-        if (cached) {
-          res.status(httpStatusCodes.OK).send({
-            message: 'Customers record successfully retrieved.',
-            data: cached,
-          })
-          return
-        }
-
         const customers = await CustomerModel.find()
 
         await redis.set('customer:all', JSON.stringify(customers), {
           ex: 2 * 60,
         })
 
-        res.status(httpStatusCodes.OK).send({
+        res.setHeader(
+          'Cache-Control',
+          'public, max-age=60, s-maxage=60, stale-while-revalidate'
+        )
+        res.status(httpStatusCodes.OK).json({
           message: 'Customers record successfully retrieved.',
           data: customers,
         })
@@ -42,11 +52,9 @@ export default async function handler(req, res) {
       try {
         const customer = await new CustomerModel(req.body).save()
 
-        await redis.set(`customer:${customer._id}`, JSON.stringify(customer), {
-          ex: 2 * 60,
-        })
+        await redis.del(`customer:${customer._id}`)
 
-        res.status(httpStatusCodes.CREATED).send({
+        res.status(httpStatusCodes.CREATED).json({
           message: 'Customer has been created successfully.',
           data: customer,
         })

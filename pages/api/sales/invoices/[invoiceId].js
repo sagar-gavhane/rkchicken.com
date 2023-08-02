@@ -13,6 +13,18 @@ import redis from 'utils/redis'
 
 export default async function handler(req, res) {
   try {
+    if (req.method === 'GET') {
+      const cached = await redis.get(`invoice:${req.query.invoiceId}`)
+
+      if (cached) {
+        res.status(httpStatusCodes.OK).json({
+          data: cached,
+          message: 'Invoice has been successfully retrieved.',
+        })
+        return
+      }
+    }
+
     if (!Types.ObjectId.isValid(req.query.invoiceId)) {
       throw invoiceError.INVALID_INVOICE_ID(req.query.invoiceId)
     }
@@ -32,16 +44,6 @@ export default async function handler(req, res) {
   switch (req.method) {
     case 'GET': {
       try {
-        const cached = await redis.get(`invoice:${req.query.invoiceId}`)
-
-        if (cached) {
-          res.status(httpStatusCodes.OK).send({
-            data: cached,
-            message: 'Invoice has been successfully retrieved.',
-          })
-          return
-        }
-
         const [invoice] = await InvoiceModel.aggregate([
           { $match: { _id: Types.ObjectId(req.query.invoiceId) } },
           customerLookup,
@@ -54,7 +56,7 @@ export default async function handler(req, res) {
           { ex: 2 * 60 }
         )
 
-        res.status(httpStatusCodes.OK).send({
+        res.status(httpStatusCodes.OK).json({
           data: invoice,
           message: 'Invoice has been successfully retrieved.',
         })
@@ -85,19 +87,13 @@ export default async function handler(req, res) {
         )
 
         await Promise.allSettled([
-          redis.set(`invoice:${req.query.invoiceId}`, JSON.stringify(invoice), {
-            ex: 2 * 60,
-          }),
-          redis.set(
-            `customer:${req.query.customerId}`,
-            JSON.stringify(customer),
-            { ex: 2 * 60 }
-          ),
+          redis.del(`invoice:${req.query.invoiceId}`),
+          redis.del(`customer:${req.query.customerId}`),
         ])
 
         sendInvoice(customer, invoice)
 
-        res.status(httpStatusCodes.OK).send({
+        res.status(httpStatusCodes.OK).json({
           data: invoice,
           message: 'Invoice has been successfully updated.',
         })
@@ -114,7 +110,7 @@ export default async function handler(req, res) {
 
         await redis.del(`invoice:${req.query.invoiceId}`)
 
-        res.status(httpStatusCodes.NO_CONTENT).send({})
+        res.status(httpStatusCodes.NO_CONTENT).json({})
       } catch (err) {
         handleError(res, err)
       }
