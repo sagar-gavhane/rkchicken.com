@@ -10,6 +10,7 @@ import { connectToDatabase } from 'utils/connectToDatabase'
 import { handleError } from 'utils/handleError'
 import { sendInvoice } from 'utils/sendInvoice'
 import redis from 'utils/redis'
+import generateETag from 'utils/generateETag'
 
 export default async function handler(req, res) {
   try {
@@ -101,6 +102,7 @@ export default async function handler(req, res) {
 
         sendInvoice(customer, invoice)
 
+        res.setHeader('Etag', generateETag())
         res.status(httpStatusCodes.OK).json({
           data: invoice,
           message: 'Invoice has been successfully updated.',
