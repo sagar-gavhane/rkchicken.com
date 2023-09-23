@@ -32,10 +32,10 @@ const InvoiceSchema = new Schema(
     },
     currentBillAmount: {
       type: Number,
-      min: [
-        0,
-        'Current bill amount field must contain a number greater than or equal to 0.',
-      ],
+      // min: [
+      //   0,
+      //   'Current bill amount field must contain a number greater than or equal to 0.',
+      // ],
       default: 0,
       set: (value) => round(value, 2),
     },
