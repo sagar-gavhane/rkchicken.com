@@ -16,7 +16,7 @@ export async function sendMessage({ message, mobile }) {
         mobile: mobile.join(','),
         message,
         sender,
-        type: 3,
+        type: 203,
         template_id: '1207166158406166581',
       },
     },
