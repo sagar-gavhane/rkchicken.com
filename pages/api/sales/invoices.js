@@ -12,6 +12,7 @@ import { customer as customerLookup } from 'aggregation-pipelines/lookups'
 import { invoice as invoiceProjection } from 'aggregation-pipelines/projections'
 import { invoiceFilter } from 'aggregation-pipelines/matches'
 import redis from 'utils/redis'
+import { generateShortKey } from 'utils/generateShortKey'
 
 export default async function handler(req, res) {
   await connectToDatabase()
@@ -64,6 +65,15 @@ export default async function handler(req, res) {
         if (!customerExists) {
           throw customerError.CUSTOMER_NOT_FOUND(customerId)
         }
+        
+        const shortKey = generateShortKey()
+
+        req.body.shortKey = shortKey
+
+        res.status(httpStatusCodes.OK).json({
+          data: req.body,
+          shortKey
+        })
 
         const invoice = await InvoiceModel(req.body).save()
 

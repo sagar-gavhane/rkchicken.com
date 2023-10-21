@@ -6,16 +6,10 @@ export function sendInvoice(customer, invoice) {
   const mobile = [customer.mobileNumber]
 
   const message = [
-    `Rktraders`,
-    `Invoice no: ${invoice.invoiceId}`,
+    `Rk Chicken Center`,
+    `Shivajivadi, Moshi`,
     `Date: ${format(new Date(invoice.invoiceDate), 'dd/MM/yyyy')}`,
-    `Chicken Rate: ${invoice.chickenRate}`,
-    `Birds nos: ${invoice.birdsNumber}`,
-    `Weight: ${invoice.weight}`,
-    `Current Bill Amount: ${invoice.currentBillAmount}`,
-    `Previous bill amount: ${invoice.outstandingAmount}`,
-    `Paid bill amount: ${invoice.paidAmount}`,
-    `Remaining bill amount: ${invoice.remainingBalance}`,
+    `Bill details: https://rkchichen.com/s/${invoice.shortKey}`,
   ].join('\n')
 
   if (customer.alternativeMobileNumber) {

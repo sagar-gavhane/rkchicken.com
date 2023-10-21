@@ -73,6 +73,10 @@ const InvoiceSchema = new Schema(
       default: 0,
       set: (value) => round(value, 2),
     },
+    shortKey: {
+      type: String,
+      unique: true
+    },
     createdAt: { type: Date, default: Date.now },
   },
   {

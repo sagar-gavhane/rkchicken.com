@@ -1,7 +1,16 @@
 const { withSentryConfig } = require('@sentry/nextjs')
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: '/s/:shortKey',
+        destination: '/api/s/:shortKey',
+      },
+    ]
+  },
+}
 
 module.exports = withSentryConfig(
   nextConfig,
