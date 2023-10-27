@@ -11,8 +11,8 @@ export function sendInvoice(customer, invoice) {
     `Rk Chicken Center`,
     `Shivajivadi, Moshi`,
     `Date: ${format(new Date(invoice.invoiceDate), 'dd/MM/yyyy')}`,
-    `Bill details: ${baseUrl}/s/${invoice.shortKey}`,
-    `Rktraders`
+    `Bill details: ${baseUrl}/s/${invoice.shortKey} `,
+    `Rktraders`,
   ].join('\n')
 
   if (customer.alternativeMobileNumber) {
