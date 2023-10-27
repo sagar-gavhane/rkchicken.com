@@ -16,11 +16,17 @@ export default async function handler(req, res) {
         const invoice = await InvoiceModel.findOne({ shortKey })
 
         if (!invoice) {
-          res.redirect(httpStatusCodes.PERMANENT_REDIRECT, `${baseUrl}/page-not-found`)
+          res.redirect(
+            httpStatusCodes.PERMANENT_REDIRECT,
+            `${baseUrl}/page-not-found`
+          )
           return
         }
 
-        const redirectTo = `${baseUrl}/sales/invoice/print/${invoice.get('_id')}`
+        const redirectTo = `http://${baseUrl}/sales/invoice/print/${invoice.get(
+          '_id'
+        )}`
+        console.log('[redirectTo]', redirectTo)
 
         res.redirect(httpStatusCodes.PERMANENT_REDIRECT, redirectTo)
       } catch (err) {
