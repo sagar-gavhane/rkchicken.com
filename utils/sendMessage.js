@@ -28,13 +28,13 @@ export async function sendMessage({ message, mobile }) {
   console.log('sendMessage.url', url)
   console.log('[BULK_SMS_GATEWAY_ENABLE]', process.env.BULK_SMS_GATEWAY_ENABLE)
 
-  if (process.env.BULK_SMS_GATEWAY_ENABLE === 'true') {
-    try {
-      const response = await fetch(url).then((response) => response.json())
-      console.log('[response]', response)
-    } catch (err) {
-      console.error(err)
-      Sentry.captureException(err, { level: 'error' })
-    }
+  // if (process.env.BULK_SMS_GATEWAY_ENABLE === 'true') {
+  try {
+    const response = await fetch(url).then((response) => response.json())
+    console.log('[response]', response)
+  } catch (err) {
+    console.error(err)
+    Sentry.captureException(err, { level: 'error' })
   }
+  // }
 }
