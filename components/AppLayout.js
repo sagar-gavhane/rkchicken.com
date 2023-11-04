@@ -53,13 +53,13 @@ export default function AppLayout(props) {
           <Menu.Item key='1' icon={<UserOutlined />}>
             <Link href='/customer'>Customer</Link>
           </Menu.Item>
-          <Menu.Item key='2' icon={<BankOutlined />}>
+          <Menu.Item key='2' icon={<BankOutlined />} hidden={true}>
             <Link href='/company'>Company</Link>
           </Menu.Item>
           <Menu.Item key='3' icon={<DollarOutlined />}>
             <Link href='/sales'>Sales</Link>
           </Menu.Item>
-          <Menu.Item key='4' icon={<ScanOutlined />}>
+          <Menu.Item key='4' icon={<ScanOutlined />} hidden={true}>
             <Link href='/purchase'>Purchase</Link>
           </Menu.Item>
         </Menu>
