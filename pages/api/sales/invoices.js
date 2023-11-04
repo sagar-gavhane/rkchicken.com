@@ -28,6 +28,7 @@ export default async function handler(req, res) {
           invoiceFilter(req.query),
           { $skip: offset },
           { $limit: limit },
+          { $sort: { invoiceDate: 1 } },
           invoiceProjection,
         ].filter(Boolean)
 
