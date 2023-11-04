@@ -65,15 +65,10 @@ export default async function handler(req, res) {
         if (!customerExists) {
           throw customerError.CUSTOMER_NOT_FOUND(customerId)
         }
-        
+
         const shortKey = generateShortKey()
 
         req.body.shortKey = shortKey
-
-        res.status(httpStatusCodes.OK).json({
-          data: req.body,
-          shortKey
-        })
 
         const invoice = await InvoiceModel(req.body).save()
 
