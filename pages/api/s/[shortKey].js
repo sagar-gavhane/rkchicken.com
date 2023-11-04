@@ -26,7 +26,6 @@ export default async function handler(req, res) {
         const redirectTo = `http://${baseUrl}/sales/invoice/print/${invoice.get(
           '_id'
         )}`
-        console.log('[redirectTo]', redirectTo)
 
         res.redirect(httpStatusCodes.PERMANENT_REDIRECT, redirectTo)
       } catch (err) {

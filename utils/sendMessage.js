@@ -26,7 +26,6 @@ export async function sendMessage({ message, mobile }) {
   )
 
   console.log('sendMessage.url', url)
-  console.log('[BULK_SMS_GATEWAY_ENABLE]', process.env.BULK_SMS_GATEWAY_ENABLE)
 
   // if (process.env.BULK_SMS_GATEWAY_ENABLE === 'true') {
   try {
