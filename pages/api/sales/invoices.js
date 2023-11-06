@@ -1,6 +1,6 @@
 import httpStatusCodes from 'http-status-codes'
 import isNumber from 'lodash.isnumber'
-import { Types } from 'mongoose'
+import mongoose, { Types } from 'mongoose'
 
 import CustomerModel from 'models/Customer'
 import InvoiceModel from 'models/Invoice'
@@ -54,6 +54,9 @@ export default async function handler(req, res) {
     }
 
     case 'POST': {
+      const session = await mongoose.startSession()
+      session.startTransaction()
+
       try {
         const customerId = req.body.customerId
 
@@ -71,12 +74,12 @@ export default async function handler(req, res) {
 
         req.body.shortKey = shortKey
 
-        const invoice = await InvoiceModel(req.body).save()
+        const invoice = await InvoiceModel(req.body).save({ session })
 
         const customer = await CustomerModel.findByIdAndUpdate(
           customerId,
           { outstandingAmount: req.body.remainingBalance },
-          { new: true, upsert: false, runValidators: true }
+          { new: true, upsert: false, runValidators: true, session }
         )
 
         await sendInvoice(customer, invoice)
@@ -86,11 +89,16 @@ export default async function handler(req, res) {
           redis.del(`customer:${customer._id}`),
         ])
 
+        await session.commitTransaction()
+        await session.endSession()
+
         res.status(httpStatusCodes.OK).json({
           data: invoice,
           message: 'Invoice has been successfully created.',
         })
       } catch (err) {
+        await session.abortTransaction()
+        await session.endSession()
         handleError(res, err)
       }
 
