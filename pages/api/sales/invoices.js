@@ -79,7 +79,7 @@ export default async function handler(req, res) {
           { new: true, upsert: false, runValidators: true }
         )
 
-        sendInvoice(customer, invoice)
+        await sendInvoice(customer, invoice)
 
         await Promise.allSettled([
           redis.del(`invoice:${invoice._id}`),

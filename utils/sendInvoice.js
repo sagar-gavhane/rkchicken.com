@@ -4,7 +4,7 @@ import { sendMessage } from 'utils/sendMessage'
 
 const baseUrl = process.env.NEXT_PUBLIC_URL
 
-export function sendInvoice(customer, invoice) {
+export async function sendInvoice(customer, invoice) {
   const mobile = [customer.mobileNumber]
 
   const message = [
@@ -19,5 +19,5 @@ export function sendInvoice(customer, invoice) {
     mobile.push(customer.alternativeMobileNumber)
   }
 
-  sendMessage({ message, mobile })
+  await sendMessage({ message, mobile })
 }
