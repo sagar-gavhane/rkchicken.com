@@ -9,21 +9,21 @@ import { customer as customerLookup } from 'aggregation-pipelines/lookups'
 import { connectToDatabase } from 'utils/connectToDatabase'
 import { handleError } from 'utils/handleError'
 import { sendInvoice } from 'utils/sendInvoice'
-import redis from 'utils/redis'
+// import redis from 'utils/redis'
 
 export default async function handler(req, res) {
   try {
-    if (req.method === 'GET') {
-      const cached = await redis.get(`invoice:${req.query.invoiceId}`)
+    // if (req.method === 'GET') {
+    //   const cached = await redis.get(`invoice:${req.query.invoiceId}`)
 
-      if (cached) {
-        res.status(httpStatusCodes.OK).json({
-          data: cached,
-          message: 'Invoice has been successfully retrieved.',
-        })
-        return
-      }
-    }
+    //   if (cached) {
+    //     res.status(httpStatusCodes.OK).json({
+    //       data: cached,
+    //       message: 'Invoice has been successfully retrieved.',
+    //     })
+    //     return
+    //   }
+    // }
 
     if (!Types.ObjectId.isValid(req.query.invoiceId)) {
       throw invoiceError.INVALID_INVOICE_ID(req.query.invoiceId)
@@ -50,11 +50,11 @@ export default async function handler(req, res) {
           invoiceProjection,
         ])
 
-        await redis.set(
-          `invoice:${req.query.invoiceId}`,
-          JSON.stringify(invoice),
-          { ex: 2 * 60 }
-        )
+        // await redis.set(
+        //   `invoice:${req.query.invoiceId}`,
+        //   JSON.stringify(invoice),
+        //   { ex: 2 * 60 }
+        // )
 
         res.status(httpStatusCodes.OK).json({
           data: invoice,
@@ -86,10 +86,10 @@ export default async function handler(req, res) {
           }
         )
 
-        await Promise.allSettled([
-          redis.del(`invoice:${req.query.invoiceId}`),
-          redis.del(`customer:${req.query.customerId}`),
-        ])
+        // await Promise.allSettled([
+        //   redis.del(`invoice:${req.query.invoiceId}`),
+        //   redis.del(`customer:${req.query.customerId}`),
+        // ])
 
         sendInvoice(customer, invoice)
 
@@ -108,7 +108,7 @@ export default async function handler(req, res) {
       try {
         await InvoiceModel.findByIdAndRemove(req.query.invoiceId)
 
-        await redis.del(`invoice:${req.query.invoiceId}`)
+        // await redis.del(`invoice:${req.query.invoiceId}`)
 
         res.status(httpStatusCodes.NO_CONTENT).json({})
       } catch (err) {

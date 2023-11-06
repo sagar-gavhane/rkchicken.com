@@ -5,25 +5,25 @@ import CustomerModel from 'models/Customer'
 import customerError from 'errors/customer'
 import { connectToDatabase } from 'utils/connectToDatabase'
 import { handleError } from 'utils/handleError'
-import redis from 'utils/redis'
+// import redis from 'utils/redis'
 
 export default async function handler(req, res) {
   try {
-    if (req.method === 'GET') {
-      const cached = await redis.get(`customer:${req.query.customerId}`)
+    // if (req.method === 'GET') {
+    //   const cached = await redis.get(`customer:${req.query.customerId}`)
 
-      if (cached) {
-        res.setHeader(
-          'Cache-Control',
-          'public, max-age=60, s-maxage=60, stale-while-revalidate'
-        )
-        res.status(httpStatusCodes.OK).json({
-          message: 'Customer record has been retrieved successfully.',
-          data: cached,
-        })
-        return
-      }
-    }
+    //   if (cached) {
+    //     res.setHeader(
+    //       'Cache-Control',
+    //       'public, max-age=60, s-maxage=60, stale-while-revalidate'
+    //     )
+    //     res.status(httpStatusCodes.OK).json({
+    //       message: 'Customer record has been retrieved successfully.',
+    //       data: cached,
+    //     })
+    //     return
+    //   }
+    // }
 
     // early catch invalid customer ids
     if (!Types.ObjectId.isValid(req.query.customerId)) {
@@ -48,16 +48,16 @@ export default async function handler(req, res) {
       try {
         const customer = await CustomerModel.findById(req.query.customerId)
 
-        await redis.set(
-          `customer:${req.query.customerId}`,
-          JSON.stringify(customer),
-          { ex: 2 * 60 }
-        )
+        // await redis.set(
+        //   `customer:${req.query.customerId}`,
+        //   JSON.stringify(customer),
+        //   { ex: 2 * 60 }
+        // )
 
-        res.setHeader(
-          'Cache-Control',
-          'public, max-age=60, s-maxage=60, stale-while-revalidate'
-        )
+        // res.setHeader(
+        //   'Cache-Control',
+        //   'public, max-age=60, s-maxage=60, stale-while-revalidate'
+        // )
         res.status(httpStatusCodes.OK).json({
           message: 'Customer record has been retrieved successfully.',
           data: customer,
@@ -81,7 +81,7 @@ export default async function handler(req, res) {
           }
         )
 
-        await redis.del(`customer:${req.query.customerId}`)
+        // await redis.del(`customer:${req.query.customerId}`)
 
         res.status(httpStatusCodes.OK).json({
           message: 'Customer record has been updated successfully.',
@@ -98,7 +98,7 @@ export default async function handler(req, res) {
       try {
         await CustomerModel.findByIdAndRemove(req.query.customerId)
 
-        await redis.del(`customer:${req.query.customerId}`)
+        // await redis.del(`customer:${req.query.customerId}`)
 
         res.status(httpStatusCodes.NO_CONTENT).json({
           message: 'Customer record has been deleted successfully.',

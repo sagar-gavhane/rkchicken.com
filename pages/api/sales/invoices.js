@@ -11,7 +11,7 @@ import { sendInvoice } from 'utils/sendInvoice'
 import { customer as customerLookup } from 'aggregation-pipelines/lookups'
 import { invoice as invoiceProjection } from 'aggregation-pipelines/projections'
 import { invoiceFilter } from 'aggregation-pipelines/matches'
-import redis from 'utils/redis'
+// import redis from 'utils/redis'
 import { generateShortKey } from 'utils/generateShortKey'
 
 export default async function handler(req, res) {
@@ -84,10 +84,10 @@ export default async function handler(req, res) {
 
         await sendInvoice(customer, invoice)
 
-        await Promise.allSettled([
-          redis.del(`invoice:${invoice._id}`),
-          redis.del(`customer:${customer._id}`),
-        ])
+        // await Promise.allSettled([
+        //   redis.del(`invoice:${invoice._id}`),
+        //   redis.del(`customer:${customer._id}`),
+        // ])
 
         await session.commitTransaction()
         await session.endSession()
