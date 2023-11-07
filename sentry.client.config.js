@@ -28,5 +28,18 @@ Sentry.init({
     }),
   ],
 
-  ignoreErrors: ['ResizeObserver loop limit exceeded'],
+  ignoreErrors: [
+    'ResizeObserver loop limit exceeded.',
+    'ResizeObserver loop completed with undelivered notifications.',
+  ],
+
+  beforeSend: (event, hint) => {
+    const error = hint.originalException
+
+    if (error && error.message && error.message.match(/ResizeObserver/i)) {
+      return null
+    }
+
+    return event
+  },
 })
