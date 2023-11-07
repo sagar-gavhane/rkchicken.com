@@ -69,10 +69,10 @@ export default async function handler(req, res) {
     }
 
     case 'PATCH': {
-      try {
-        const session = await mongoose.startSession()
-        session.startTransaction()
+      const session = await mongoose.startSession()
+      session.startTransaction()
 
+      try {
         const invoice = await InvoiceModel.findByIdAndUpdate(
           req.query.invoiceId,
           req.body,
