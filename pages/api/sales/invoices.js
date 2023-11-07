@@ -48,6 +48,7 @@ export default async function handler(req, res) {
         })
       } catch (err) {
         handleError(res, err)
+        return
       }
 
       break
@@ -100,6 +101,7 @@ export default async function handler(req, res) {
         await session.abortTransaction()
         await session.endSession()
         handleError(res, err)
+        return
       }
 
       break

@@ -1,5 +1,5 @@
 import httpStatusCodes from 'http-status-codes'
-import { Types } from 'mongoose'
+import mongoose, { Types } from 'mongoose'
 
 import InvoiceModel from 'models/Invoice'
 import CustomerModel from 'models/Customer'
@@ -62,6 +62,7 @@ export default async function handler(req, res) {
         })
       } catch (err) {
         handleError(res, err)
+        return
       }
 
       break
@@ -69,21 +70,19 @@ export default async function handler(req, res) {
 
     case 'PATCH': {
       try {
+        const session = await mongoose.startSession()
+        session.startTransaction()
+
         const invoice = await InvoiceModel.findByIdAndUpdate(
           req.query.invoiceId,
           req.body,
-          { new: true, runValidators: true }
+          { new: true, runValidators: true, session }
         )
 
         const customer = await CustomerModel.findByIdAndUpdate(
           req.body.customerId,
-          {
-            outstandingAmount: req.body.remainingBalance,
-          },
-          {
-            new: true,
-            runValidators: true,
-          }
+          { outstandingAmount: req.body.remainingBalance },
+          { new: true, runValidators: true, session }
         )
 
         // await Promise.allSettled([
@@ -91,14 +90,20 @@ export default async function handler(req, res) {
         //   redis.del(`customer:${req.query.customerId}`),
         // ])
 
-        sendInvoice(customer, invoice)
+        await sendInvoice(customer, invoice)
+
+        await session.commitTransaction()
+        await session.endSession()
 
         res.status(httpStatusCodes.OK).json({
           data: invoice,
           message: 'Invoice has been successfully updated.',
         })
       } catch (err) {
+        await session.abortTransaction()
+        await session.endSession()
         handleError(res, err)
+        return
       }
 
       break

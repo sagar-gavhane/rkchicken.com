@@ -33,9 +33,11 @@ export default async function handler(req, res) {
     await connectToDatabase()
 
     // early catch customer is exist or not database
-    const customer = await CustomerModel.exists({ _id: req.query.customerId })
+    const customerExists = await CustomerModel.exists({
+      _id: req.query.customerId,
+    })
 
-    if (!customer) {
+    if (!customerExists) {
       throw customerError.CUSTOMER_NOT_FOUND(req.query.customerId)
     }
   } catch (err) {
@@ -64,6 +66,7 @@ export default async function handler(req, res) {
         })
       } catch (err) {
         handleError(res, err)
+        return
       }
 
       break
@@ -74,11 +77,7 @@ export default async function handler(req, res) {
         const customer = await CustomerModel.findByIdAndUpdate(
           req.query.customerId,
           req.body,
-          {
-            new: true,
-            upsert: false,
-            runValidators: true,
-          }
+          { new: true, upsert: false, runValidators: true }
         )
 
         // await redis.del(`customer:${req.query.customerId}`)
@@ -89,6 +88,7 @@ export default async function handler(req, res) {
         })
       } catch (err) {
         handleError(res, err)
+        return
       }
 
       break
@@ -106,6 +106,7 @@ export default async function handler(req, res) {
         })
       } catch (err) {
         handleError(res, err)
+        return
       }
 
       break
