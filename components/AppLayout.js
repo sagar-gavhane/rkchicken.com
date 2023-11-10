@@ -2,13 +2,7 @@ import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
 import { Layout, Menu } from 'antd'
-import {
-  UserOutlined,
-  BankOutlined,
-  DollarOutlined,
-  ScanOutlined,
-  LogoutOutlined,
-} from '@ant-design/icons'
+import { UserOutlined, DollarOutlined, LogoutOutlined } from '@ant-design/icons'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 
@@ -17,7 +11,7 @@ import Logo from './Logo'
 
 const Clock = dynamic(() => import('components/Clock'), { ssr: false })
 
-const { Header, Content, Footer, Sider } = Layout
+const { Header, Content, Footer } = Layout
 
 const year = new Date().getFullYear()
 
