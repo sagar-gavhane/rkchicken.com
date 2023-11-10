@@ -42,8 +42,8 @@ export default function AppLayout(props) {
   return (
     <Layout id='components-layout-demo-responsive'>
       <Sider defaultCollapsed={true}>
-        <Link href='/customer' className='logo'>
-          RK
+        <Link href='/customer'>
+          <span className='logo'>RK</span>
         </Link>
         <Menu
           theme='dark'
@@ -67,8 +67,11 @@ export default function AppLayout(props) {
       <Layout>
         <Header className='site-layout-header'>
           <Clock />
-          <Link href='/logout' className='logout-outlined-wrapper'>
-            <LogoutOutlined style={{ color: 'ButtonText' }} />
+          <Link href='/logout'>
+            <LogoutOutlined
+              className='logout-outlined-wrapper'
+              style={{ color: 'ButtonText' }}
+            />
           </Link>
         </Header>
         <Content style={{ margin: '1.5rem 1.5rem 0' }}>
