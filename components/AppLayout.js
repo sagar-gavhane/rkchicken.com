@@ -28,14 +28,9 @@ export default function AppLayout(props) {
   const selectedKeys = {
     '/customer': '1',
     '/customer/report': '1',
-    '/company': '2',
-    '/company/report': '2',
     '/sales': '3',
     '/sales/invoice/create': '3',
     '/sales/invoice/update/[invoiceId]': '3',
-    '/purchase/invoice/create': '4',
-    '/purchase/invoice/update/[invoiceId]': '4',
-    '/purchase': '4',
   }
 
   if (!user?.signedIn && typeof window !== 'undefined') router.push('/logout')

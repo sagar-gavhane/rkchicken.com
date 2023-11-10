@@ -1,11 +1,4 @@
 const validationRules = {
-  companyName: [
-    {
-      min: 3,
-      message: 'Company name field must be at least 3 characters in length.',
-    },
-    { required: true, message: 'Company name field is required.' },
-  ],
   customerName: [
     {
       min: 3,
