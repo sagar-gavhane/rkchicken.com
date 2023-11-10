@@ -64,3 +64,19 @@
     width: 50vw;
   }
 }
+
+.txt-bold {
+  font-weight: bold;
+}
+
+.txt-green {
+  color: #009688;
+}
+
+.txt-yellow {
+  color: #ff9800;
+}
+
+.txt-red {
+  color: #e91e63;
+}
