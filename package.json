@@ -28,7 +28,7 @@
     "mongoose": "^6.11.4",
     "mongoose-auto-increment": "^5.0.1",
     "nanoid": "^5.0.2",
-    "next": "^12.3.4",
+    "next": "^13.5.0",
     "node-fetch": "^2.6.1",
     "nprogress": "^0.2.0",
     "papaparse": "^5.3.0",
