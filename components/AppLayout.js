@@ -13,6 +13,7 @@ import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 
 import AuthContext from 'context/AuthContext'
+import Logo from './Logo'
 
 const Clock = dynamic(() => import('components/Clock'), { ssr: false })
 
@@ -41,38 +42,26 @@ export default function AppLayout(props) {
 
   return (
     <Layout id='components-layout-demo-responsive'>
-      <Sider defaultCollapsed={true}>
-        <Link href='/customer'>
-          <span className='logo'>RK</span>
-        </Link>
-        <Menu
-          theme='dark'
-          mode='inline'
-          defaultSelectedKeys={[selectedKeys[router.pathname]]}
-        >
-          <Menu.Item key='1' icon={<UserOutlined />}>
-            <Link href='/customer'>Customer</Link>
-          </Menu.Item>
-          <Menu.Item key='2' icon={<BankOutlined />} hidden={true}>
-            <Link href='/company'>Company</Link>
-          </Menu.Item>
-          <Menu.Item key='3' icon={<DollarOutlined />}>
-            <Link href='/sales'>Sales</Link>
-          </Menu.Item>
-          <Menu.Item key='4' icon={<ScanOutlined />} hidden={true}>
-            <Link href='/purchase'>Purchase</Link>
-          </Menu.Item>
-        </Menu>
-      </Sider>
       <Layout>
         <Header className='site-layout-header'>
+          <Logo />
           <Clock />
-          <Link href='/logout'>
-            <LogoutOutlined
-              className='logout-outlined-wrapper'
-              style={{ color: 'ButtonText' }}
-            />
-          </Link>
+          <Menu
+            className='site-layout-menu'
+            theme='light'
+            mode='horizontal'
+            defaultSelectedKeys={[selectedKeys[router.pathname]]}
+          >
+            <Menu.Item key='1' icon={<UserOutlined />}>
+              <Link href='/customer'>Customer</Link>
+            </Menu.Item>
+            <Menu.Item key='3' icon={<DollarOutlined />}>
+              <Link href='/sales'>Sales</Link>
+            </Menu.Item>
+            <Menu.Item key='5' icon={<LogoutOutlined />}>
+              <Link href='/logout'>Logout</Link>
+            </Menu.Item>
+          </Menu>
         </Header>
         <Content style={{ margin: '1.5rem 1.5rem 0' }}>
           <div className='site-layout'>{props.children}</div>

@@ -143,6 +143,7 @@ function SalesInvoiceForm(props) {
         '/sales/invoice/',
         { invoiceId: props.invoice._id },
       ])
+      cache.invalidateQueries('/sms-balance')
 
       router.push('/sales')
     } else {

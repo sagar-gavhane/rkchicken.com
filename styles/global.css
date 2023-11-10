@@ -33,7 +33,7 @@
 .site-layout-header {
   background: #fff;
   display: grid;
-  grid-template-columns: 1fr max-content;
+  grid-template-columns: 130px 1fr max-content;
   padding: 0 1.25rem;
 }
 
@@ -41,6 +41,10 @@
   display: grid;
   align-items: center;
   justify-content: center;
+}
+
+.site-layout-menu {
+  height: 64px;
 }
 
 .site-layout {
