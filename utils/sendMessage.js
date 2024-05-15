@@ -29,8 +29,8 @@ export async function sendMessage({ message, mobile }) {
 
   // if (process.env.BULK_SMS_GATEWAY_ENABLE === 'true') {
   try {
-    const response = await fetch(url).then((response) => response.json())
-    console.log('[response]', response)
+    // const response = await fetch(url).then((response) => response.json())
+    // console.log('[response]', response)
   } catch (err) {
     console.error(err)
     Sentry.captureException(err, { level: 'error' })

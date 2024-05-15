@@ -80,3 +80,17 @@
 .txt-red {
   color: #e91e63;
 }
+
+.customer-detail-header {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 1rem;
+  /* border: 2px solid salmon; */
+  align-items: center;
+}
+
+.customer-detail-header .customer-bio {
+  display: grid;
+  grid-template-columns: repeat(2, 250px);
+  gap: 0.5rem;
+}

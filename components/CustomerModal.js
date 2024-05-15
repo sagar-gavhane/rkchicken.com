@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Form, Input, message } from 'antd'
 import { useQueryCache } from 'react-query'
+import { captureException } from '@sentry/nextjs'
 
 import validationRules from 'config/validationRules'
 import customerService from 'services/customers'
+import customerError from 'errors/customer'
 
 const CustomerModal = (props) => {
   const [form] = Form.useForm()
@@ -51,7 +53,7 @@ const CustomerModal = (props) => {
               await customerService.update(props.customer._id, values)
               message.success('Customer has been updated successfully.')
             } else {
-              await customerService.create(values)
+              await customerService.create('values')
               message.success('Customer has been created successfully.')
             }
 
@@ -60,6 +62,19 @@ const CustomerModal = (props) => {
             props.onCancel()
           })
           .catch((err) => {
+            if (err.errorFields) {
+              message.error('Customer creation form contains invalid data.')
+              return
+            }
+
+            const customerCreationError = customerError.CustomerCreationError(
+              err.values
+            )
+
+            captureException(customerCreationError, {
+              level: 'error',
+              extra: { errorMessage: err.message, stackTrace: err.stack },
+            })
             message.error(err.message)
           })
           .finally(() => setIsSubmitting(false))

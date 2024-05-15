@@ -1,7 +1,12 @@
 import Axios from 'utils/axiosInstance'
 
 class Customer {
-  async get() {
+  async get(customerID) {
+    if (customerID) {
+      const response = await Axios.get(`/customers/${customerID}`)
+      return response.data.data
+    }
+
     const response = await Axios.get('/customers')
     return response.data.data
   }

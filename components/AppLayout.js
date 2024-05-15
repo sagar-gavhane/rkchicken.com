@@ -21,6 +21,7 @@ export default function AppLayout(props) {
 
   const selectedKeys = {
     '/customer': '1',
+    '/customer/[customerId]': '1',
     '/customer/report': '1',
     '/sales': '3',
     '/sales/invoice/create': '3',

@@ -10,10 +10,17 @@ import {
 } from '@ant-design/icons'
 import { useQuery, useQueryCache } from 'react-query'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
+import { captureException } from '@sentry/nextjs'
+import { PatternFormat, NumericFormat } from 'react-number-format'
+import formatRelative from 'date-fns/formatRelative'
 
 import AppLayout from 'components/AppLayout'
 import CustomerModal from 'components/CustomerModal'
+import GlobalNumericFormat from 'components/GlobalNumericFormat'
 import customerService from 'services/customers'
+import customerError from 'errors/customer'
+import capitalize from 'utils/capitalize'
 
 export default function CustomerPage() {
   const [showCustomerModal, setShowCustomerModal] = useState(false)
@@ -28,9 +35,24 @@ export default function CustomerPage() {
   )
 
   const handleDeleteCustomer = async (customerID) => {
-    await customerService.delete(customerID)
-    message.success('customer has been successfully deleted.')
-    cache.invalidateQueries(['/customers'])
+    try {
+      await customerService.delete(customerID)
+      message.success('Customer deleted successfully.')
+      cache.invalidateQueries(['/customers'])
+    } catch (err) {
+      const customerDeletionError =
+        customerError.CustomerDeletionError(customerID)
+
+      message.error(customerDeletionError.message)
+
+      captureException(customerDeletionError, {
+        level: 'error',
+        extra: {
+          errorMessage: err.message,
+          stackTrace: err.stack,
+        },
+      })
+    }
   }
 
   const columns = [
@@ -38,45 +60,83 @@ export default function CustomerPage() {
       title: '#',
       dataIndex: 'customerId',
       key: 'customerId',
+      align: 'center',
     },
     {
       title: 'Customer name',
       dataIndex: 'name',
       key: 'name',
+      render: (_, _customer) => {
+        return (
+          <Link href={`/customer/${_customer._id}`}>
+            <a>{_customer.name}</a>
+          </Link>
+        )
+      },
     },
     {
       title: 'Mobile number',
       dataIndex: 'mobileNumber',
       key: 'mobileNumber',
+      render: (_, _customer) => {
+        return (
+          <Typography.Link href={`tel:${_customer.mobileNumber}`}>
+            <PatternFormat
+              value={_customer.mobileNumber}
+              format='+91 ##### #####'
+              displayType='text'
+            />
+          </Typography.Link>
+        )
+      },
     },
     {
       title: 'Alternative mobile number',
       dataIndex: 'alternativeMobileNumber',
       key: 'alternativeMobileNumber',
+      render: (_, _customer) => {
+        return (
+          <Typography.Link href={`tel:${_customer.alternativeMobileNumber}`}>
+            <PatternFormat
+              value={_customer.alternativeMobileNumber}
+              format='+91 ##### #####'
+              displayType='text'
+            />
+          </Typography.Link>
+        )
+      },
     },
     {
       title: 'Discount rate',
       dataIndex: 'discountRate',
       key: 'discountRate',
-      render: (value) => `Rs.${round(value, 2)}`,
+      render: (value) => <GlobalNumericFormat value={value} />,
     },
     {
       title: 'Outstanding amount',
       dataIndex: 'outstandingAmount',
       key: 'outstandingAmount',
-      render: (value) => `Rs.${round(value, 2)}`,
+      render: (value) => <GlobalNumericFormat value={value} />,
     },
     {
       title: 'Created at',
       dataIndex: 'createdAt',
       key: 'createdAt',
-      render: (createdAt) => `${moment(createdAt).fromNow()}`,
+      render: (_, _customer) => {
+        return capitalize(
+          formatRelative(new Date(_customer.createdAt), new Date())
+        )
+      },
     },
     {
       title: 'Updated at',
       dataIndex: 'updatedAt',
       key: 'updatedAt',
-      render: (updatedAt) => `${moment(updatedAt).fromNow()}`,
+      render: (_, _customer) => {
+        return capitalize(
+          formatRelative(new Date(_customer.updatedAt), new Date(), {})
+        )
+      },
     },
     {
       title: 'Action',
@@ -140,10 +200,12 @@ export default function CustomerPage() {
       </Space>
       <Table
         scroll={{ x: true }}
+        rowKey={(row) => row._id}
         loading={isLoading}
         columns={columns}
         dataSource={data}
         bordered
+        title={() => <Typography.Title level={4}>Customers</Typography.Title>}
       />
     </AppLayout>
   )
