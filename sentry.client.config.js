@@ -47,11 +47,12 @@ Sentry.init({
   },
 })
 
-navigation.addEventListener('navigate', (event) => {
-  const url = new URL(event.destination.url)
+// navigation.addEventListener('navigate', (event) => {
+//   const url = new URL(event.destination.url)
+//   console.log('[url]', url)
 
-  if (url.pathname.includes('/sales/invoice/print/')) return
-  if (url.pathname.includes('/api/s/')) return
+//   if (url.pathname.includes('/sales/invoice/print/')) return
+//   if (url.pathname.includes('/api/s/')) return
 
-  replay.start()
-})
+//   replay.start()
+// })
