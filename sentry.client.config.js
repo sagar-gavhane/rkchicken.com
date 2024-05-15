@@ -4,6 +4,15 @@
 
 import * as Sentry from '@sentry/nextjs'
 
+const replay = new Sentry.Replay({
+  maskAllText: false,
+  maskAllInputs: false,
+  maskAttributes: false,
+  blockAllMedia: false,
+  networkDetailAllowUrls: [window.location.origin],
+  networkCaptureBodies: true,
+})
+
 Sentry.init({
   dsn: 'https://f7b9ae8c13e846ab8fe4ba013392a291@o4505475304849408.ingest.sentry.io/4505475328442368',
 
@@ -20,13 +29,7 @@ Sentry.init({
   replaysSessionSampleRate: 0.1,
 
   // You can remove this option if you're not planning to use the Sentry Session Replay feature:
-  integrations: [
-    new Sentry.Replay({
-      // Additional Replay configuration goes in here, for example:
-      maskAllText: true,
-      blockAllMedia: true,
-    }),
-  ],
+  integrations: [replay],
 
   ignoreErrors: [
     'ResizeObserver loop limit exceeded.',
@@ -42,4 +45,13 @@ Sentry.init({
 
     return event
   },
+})
+
+navigation.addEventListener('navigate', (event) => {
+  const url = new URL(event.destination.url)
+
+  if (url.pathname.includes('/sales/invoice/print/')) return
+  if (url.pathname.includes('/api/s/')) return
+
+  replay.start()
 })
