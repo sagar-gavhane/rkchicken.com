@@ -6,7 +6,12 @@ export default function Logo() {
   return (
     <Link href='/customer'>
       <a>
-        <Image src='/rkchicken-logo.png' width={120} height={58} alt='logo' />
+        <Image
+          src='/rkchicken-logo.png'
+          width={120}
+          height={58}
+          alt='rkchicken logo'
+        />
       </a>
     </Link>
   )
